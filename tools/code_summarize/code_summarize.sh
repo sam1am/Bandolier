@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Activate the virtual environment for the app
-source ../../../svenv/bin/activate
+source ../../venv/bin/activate
 
 # Run the app
 python code_summarize.py
