@@ -6,6 +6,8 @@ from ItsPrompt.prompt import Prompt
 import openai
 import config
 import subprocess
+import pathspec
+
 
 # Allows users to select files from the current directory and create a code summary in markdown format.
 # The selected files are saved in a json file so that the user can easily select the same files again.
@@ -24,8 +26,24 @@ def create_hidden_directory():
         hidden_directory.mkdir()
 
 def get_tree_output():
-    result = subprocess.run(["tree"], stdout=subprocess.PIPE, text=True)
-    return result.stdout
+    def walk_directory_tree(directory, level, gitignore_specs):
+        output = ""
+        for entry in sorted(os.listdir(directory)):
+            entry_path = os.path.join(directory, entry)
+            relative_entry_path = os.path.relpath(entry_path, ".")
+
+            if gitignore_specs is None or not gitignore_specs.match_file(relative_entry_path):
+                if os.path.isfile(entry_path):
+                    output += f"{' ' * (4 * level)}|-- {entry}\n"
+                elif os.path.isdir(entry_path):
+                    output += f"{' ' * (4 * level)}|-- {entry}\n"
+                    output += walk_directory_tree(entry_path, level + 1, gitignore_specs)
+        return output
+
+    gitignore_specs = parse_gitignore()
+    tree_output = walk_directory_tree(".", 0, gitignore_specs)
+    return tree_output
+
 
 
 def generate_summary(file_content):
@@ -121,26 +139,44 @@ def create_compressed_summary(selected_files):
                 print("-----------------------------------")
 
 
+def parse_gitignore():
+    gitignore_path = Path(".gitignore")
+    if gitignore_path.exists():
+        with open(gitignore_path, "r") as f:
+            gitignore_content = f.read()
+        gitignore_specs = pathspec.PathSpec.from_lines(pathspec.patterns.GitWildMatchPattern, gitignore_content.splitlines())
+    else:
+        gitignore_specs = None
+    return gitignore_specs
+
 def display_files():
     print("List of files in the current directory and its subdirectories:")
     files = []
+    gitignore_specs = parse_gitignore()
     for root, _, filenames in os.walk("."):
         for filename in filenames:
             if not root.startswith('./.'):
-                files.append(os.path.join(root, filename))
+                file_path = os.path.join(root, filename)
+                if gitignore_specs is None or not gitignore_specs.match_file(file_path):
+                    files.append(file_path)
     return files
 
 
+
 def select_files(files, previous_selection):
+    gitignore_specs = parse_gitignore()
+    filtered_files = [file for file in files if gitignore_specs is None or not gitignore_specs.match_file(file)]
+
     print("\nUse arrow keys to select/deselect files, press ENTER to continue.")
     selected_files = Prompt.checkbox(
         question="Select files",
-        options=[(file, file) for file in files],
+        options=[(file, file) for file in filtered_files],
         pointer_at=0,
-        default_checked=[file for file in previous_selection if file in files],
+        default_checked=[file for file in previous_selection if file in filtered_files],
         min_selections=0,
     )
     return selected_files
+
 
 def create_code_summary(selected_files):
     summary_directory = Path(".summary_files")
@@ -162,47 +198,48 @@ def create_code_summary(selected_files):
 
 
 def read_previous_selection():
-    hidden_directory = Path(".summary_files")  # Add this line
-    selection_file = hidden_directory / "previous_selection.json"  # Update this line
+    hidden_directory = Path(".summary_files") 
+    selection_file = hidden_directory / "previous_selection.json" 
     if selection_file.exists():
-        with open(selection_file, "r") as f:  # Update this line
+        with open(selection_file, "r") as f: 
             previous_selection = json.load(f)
         return previous_selection
     else:
         return []
 
 def write_previous_selection(selected_files):
-    hidden_directory = Path(".summary_files")  # Add this line
-    with open(hidden_directory / "previous_selection.json", "w") as f:  # Update this line
+    hidden_directory = Path(".summary_files")  
+    with open(hidden_directory / "previous_selection.json", "w") as f: 
         json.dump(selected_files, f)
 
 def main():
-    create_hidden_directory()  # Add this line
+    create_hidden_directory() 
     files = display_files()
+    filtered_files = [file for file in files if not file.startswith('./.')]  
     previous_selection = read_previous_selection()
-    selected_files = select_files(files, previous_selection)
+    selected_files = select_files(filtered_files, previous_selection) 
     write_previous_selection(selected_files)
     create_code_summary(selected_files)
     create_compressed_summary(selected_files)
     print("\nCode summary successfully created in '.summary_files/code_summary.md'.")
     print("\nCompressed code summary successfully created in '.summary_files/compressed_code_summary.md'.")
-     # Load compressed code summary
+    # Load compressed code summary
     summary_directory = Path(".summary_files")
     compressed_summary_file = summary_directory / "compressed_code_summary.md"
     with open(compressed_summary_file, "r") as f:
         compressed_summary = f.read()
 
     # Generate updated README.md file using GPT-4
-    readme_content = generate_readme(compressed_summary)
+    # readme_content = generate_readme(compressed_summary)
 
     # Save the updated README.md file
-    readme_file = Path("README.md")
-    if readme_file.exists():
-        readme_file.unlink()
-    with open(readme_file, "w") as f:
-        f.write(readme_content)
+    # readme_file = Path("README.md")
+    # if readme_file.exists():
+        
+    # with open(readme_file, "w") as f:
+    #     f.write(readme_content)
 
-    print("\nUpdated README.md file successfully generated in 'README.md'.")
+    # print("\nUpdated README.md file successfully generated in 'README.md'.")
 
 if __name__ == "__main__":
     main()
