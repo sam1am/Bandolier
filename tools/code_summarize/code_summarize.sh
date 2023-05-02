@@ -1,10 +1,18 @@
 #!/bin/bash
 
-# Activate the virtual environment for the app
-source ../../../venv/bin/activate
+#get the path of the script
+SCRIPT=$(readlink -f "$0")
+SCRIPTPATH=$(dirname "$SCRIPT")
+GRANDPARENTDIR=$(dirname "$(dirname "$SCRIPTPATH")")
 
-# Run the app
-python code_summarize.py
+#echo the path
+echo "$GRANDPARENTDIR"
+
+# Activate the virtual environment for the app, two levels up from the script locartion
+source "$GRANDPARENTDIR/venv/bin/activate"
+
+# Run the app in the script location
+python "$SCRIPTPATH/app.py"
 
 # Deactivate the virtual environment
 deactivate

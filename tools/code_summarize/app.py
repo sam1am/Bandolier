@@ -8,6 +8,8 @@ import config
 import subprocess
 import pathspec
 
+IGNORE_LIST = [".git", "other_folder"]
+
 
 # Allows users to select files from the current directory and create a code summary in markdown format.
 # The selected files are saved in a json file so that the user can easily select the same files again.
@@ -32,18 +34,19 @@ def get_tree_output():
             entry_path = os.path.join(directory, entry)
             relative_entry_path = os.path.relpath(entry_path, ".")
 
-            if gitignore_specs is None or not gitignore_specs.match_file(relative_entry_path):
-                if os.path.isfile(entry_path):
-                    output += f"{' ' * (4 * level)}|-- {entry}\n"
-                elif os.path.isdir(entry_path):
-                    output += f"{' ' * (4 * level)}|-- {entry}\n"
-                    output += walk_directory_tree(entry_path, level + 1, gitignore_specs)
+            # Check if the entry is not in the IGNORE_LIST
+            if not any(ignore_item in entry_path for ignore_item in IGNORE_LIST):
+                if gitignore_specs is None or not gitignore_specs.match_file(relative_entry_path):
+                    if os.path.isfile(entry_path):
+                        output += f"{' ' * (4 * level)}|-- {entry}\n"
+                    elif os.path.isdir(entry_path):
+                        output += f"{' ' * (4 * level)}|-- {entry}\n"
+                        output += walk_directory_tree(entry_path, level + 1, gitignore_specs)
         return output
 
     gitignore_specs = parse_gitignore()
     tree_output = walk_directory_tree(".", 0, gitignore_specs)
     return tree_output
-
 
 
 def generate_summary(file_content):
@@ -154,8 +157,9 @@ def display_files():
     files = []
     gitignore_specs = parse_gitignore()
     for root, _, filenames in os.walk("."):
-        for filename in filenames:
-            if not root.startswith('./.'):
+        # Check if the root directory is in the IGNORE_LIST
+        if not any(ignore_item in root for ignore_item in IGNORE_LIST):
+            for filename in filenames:
                 file_path = os.path.join(root, filename)
                 if gitignore_specs is None or not gitignore_specs.match_file(file_path):
                     files.append(file_path)
