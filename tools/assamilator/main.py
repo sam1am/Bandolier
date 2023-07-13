@@ -17,7 +17,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 WORKING_DIR = os.path.join(os.getcwd(), "workspace")
-VAULT_DIR = '/Users/johngarfield/Library/Mobile Documents/iCloud~md~obsidian/Documents/OBSIDIAN/Transcriptions'
+VAULT_DIR = os.path.join(os.getcwd(), "vault")
+
+if not os.path.exists(WORKING_DIR):
+    os.makedirs(WORKING_DIR)
+
+if not os.path.exists(VAULT_DIR):
+    os.makedirs(VAULT_DIR)
 
 CONFIG_FILE = 'config.json'
 
@@ -42,6 +48,7 @@ config = load_config()
 folder_list = config.get('folder_list', [])
 print("Loaded config: ", config)
 VAULT_DIR = config.get('vault_dir', VAULT_DIR)
+
 
 compute_type = detect_platform()
 
@@ -90,8 +97,13 @@ def transcribe_audio(file_path, dir_name, compute_type):
     start_time = time.time()
     print("Processing file: ", abs_file_path)
     hf_token = os.getenv("HF_TOKEN")
-    cmd = f"whisperx '{abs_file_path}' --diarize --hf_token {hf_token} --compute_type {compute_type} --language en"
-    
+
+    # Check for platform and adjust command accordingly
+    if platform.system() == 'Windows':
+        cmd = f"whisperx \"{abs_file_path}\" --diarize --hf_token {hf_token} --compute_type {compute_type} --language en"
+    else:
+        cmd = f"whisperx '{abs_file_path}' --diarize --hf_token {hf_token} --compute_type {compute_type} --language en"
+
     process = subprocess.Popen(
         cmd,
         shell=True,
@@ -144,6 +156,8 @@ def add_folder():
 def set_vault():
     global VAULT_DIR
     VAULT_DIR = filedialog.askdirectory()
+    if not os.path.exists(VAULT_DIR):
+        os.makedirs(VAULT_DIR)
     save_config({'folder_list': folder_list, 'vault_dir': VAULT_DIR})
     vault_label.config(text="Vault: "+VAULT_DIR)
 
