@@ -4,15 +4,15 @@ import time
 import subprocess
 import glob
 import logging
-from unsilence import Unsilence
-from dotenv import load_dotenv
 import json
 import platform
 import tempfile
 from tkinter import filedialog
-from tkinter import ttk
-from tkinter import messagebox
 import tkinter as tk
+from datetime import datetime
+import tkinter.scrolledtext as st
+from ttkthemes import ThemedTk
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -45,40 +45,38 @@ VAULT_DIR = config.get('vault_dir', VAULT_DIR)
 
 compute_type = detect_platform()
 
-root = tk.Tk()
-root.title("Awesome Transcriber")
+root = ThemedTk(theme="arc")
+root.title("Assammilator")
 root.geometry("600x400")
+root.minsize(600, 400)  # set minimum window size
 
-style = ttk.Style()
-style.theme_use('clam')  # A theme that can be styled to be somewhat similar to Material Design
-
-style.configure('TButton', font=('Helvetica', 10), background='lightgrey')
-style.configure('TLabel', font=('Helvetica', 12), background='white')
-style.configure('TFrame', background='white')
-
-frame1 = ttk.Frame(root)
+frame1 = tk.Frame(root, padx=25, pady=25)
 frame1.pack(fill='x')
 
-frame2 = ttk.Frame(root)
+frame2 = tk.Frame(root, padx=5, pady=5)
 frame2.pack(fill='x')
 
-frame3 = ttk.Frame(root)
-frame3.pack(fill='both', expand=True)
+frame3 = tk.Frame(root, padx=5, pady=5)
+frame3.pack(fill='both')
 
-frame4 = ttk.Frame(root)
-frame4.pack(fill='x')
+frame4 = tk.Frame(root, padx=5, pady=5)
+frame4.pack(fill='x', side="bottom")
 
-vault_label = ttk.Label(frame1, text="Vault: " + VAULT_DIR)
-compute_type_label = ttk.Label(frame1, text="Compute Type: " + compute_type)  # New label to display compute type
+vault_label = tk.Label(frame1, text="Vault:\n" + '...' + VAULT_DIR[-50:])
+compute_type_label = tk.Label(frame1, text="Compute Type:\n" + compute_type)
+folders_label = tk.Label(frame2, text="Folders to Process:")
 folder_listbox = tk.Listbox(frame2, width=50, height=10)
 vault_label.pack(side='left')
-compute_type_label.pack(side='left')  # Pack the new label
+compute_type_label.pack(side='bottom')  # This will make compute_type_label appear below vault_label
+folders_label.pack(side='top')
+folder_listbox.pack(fill='both')
+
 
 for folder in folder_list:
     folder_listbox.insert(tk.END, folder)
 
-text_box = tk.Text(frame3)
-text_box.configure(state='disabled') # Make the text box uneditable
+text_box = st.ScrolledText(frame3, height=3)
+text_box.configure(state='disabled')
 
 
 def copy_files(src_path, dst_path):
@@ -131,9 +129,10 @@ def clear_data(src_path):
 
 
 def save_to_obsidian_vault(transcription, file_name):
-    with open(os.path.join(VAULT_DIR, file_name + '.md'), 'w') as f:
-        f.write(f"# Transcription of {file_name}\n\n{transcription}")
-
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    metadata = f"---\ndataview\ntimestamp: {timestamp}\n---\n\n"
+    with open(os.path.join(VAULT_DIR, file_name + ' Transcript.md'), 'w') as f:
+        f.write(f"# Transcription of {file_name}\n\n{metadata}{transcription}")
 
 
 def add_folder():
@@ -150,7 +149,11 @@ def set_vault():
 
 
 def start_processing():
-    text_box.insert(tk.END, "Starting Process...")
+    add_button.config(state='disabled')  # Disable buttons
+    set_button.config(state='disabled')
+    start_button.config(state='disabled')
+    text_box.configure(state='normal')  # Enable the text box
+    text_box.insert(tk.END, "Starting Process...\n")
     for folder in folder_list:
         if os.path.exists(folder):
             copy_files(folder, WORKING_DIR)
@@ -162,14 +165,17 @@ def start_processing():
                     clear_data(folder)
                     file_name = os.path.splitext(file)[0]
                     save_to_obsidian_vault(transcription, file_name)
-                    text_box.insert(tk.END, f"Processed {file_name} and saved transcription to Obsidian vault.")
+                    text_box.insert(tk.END, f"Processed {file_name} and saved transcription to Obsidian vault.\n")
         else:
-            text_box.insert(tk.END, f"Folder {folder} not found.")
-    text_box.insert(tk.END, "Finished Processing.")
+            text_box.insert(tk.END, f"Folder {folder} not found.\n")
+    # text_box.insert(tk.END, "Finished Processing.\n")
+    # print("Finished Processing: ", folder_list)
+    text_box.configure(state='disabled')  # Disable the text box once all text has been inserted
 
-add_button = ttk.Button(frame4, text="Add Folder", command=add_folder)
-set_button = ttk.Button(frame4, text="Set Vault", command=set_vault)
-start_button = ttk.Button(frame4, text="Start", command=start_processing)
+
+add_button = tk.Button(frame4, text="Add Folder", command=add_folder)
+set_button = tk.Button(frame4, text="Set Vault", command=set_vault)
+start_button = tk.Button(frame4, text="Start", command=start_processing)
 
 vault_label.pack(side='left')
 folder_listbox.pack(fill='both', expand=True)
