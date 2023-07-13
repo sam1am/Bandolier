@@ -1,3 +1,3 @@
 pyudev
-unsilence
+ttkthemes
 python-dotenv
