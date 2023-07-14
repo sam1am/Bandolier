@@ -20,7 +20,7 @@ class AudioProcessor:
         self.compute_type = self.detect_platform()
     
     def detect_platform(self):
-        return 'int8' if platform.system() == 'Darwin' else 'float16'
+        return 'int8' if platform.system() == 'Darwin' else 'float32'
 
     def copy_files(self, src_path, dst_path):
         src_path = os.path.normpath(src_path)
@@ -48,9 +48,13 @@ class AudioProcessor:
             cwd=dir_name,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True,
         )
+
         stdout, stderr = process.communicate()
+        stdout = stdout.decode('utf-8', errors='ignore')
+        stderr = stderr.decode('utf-8', errors='ignore')
+
+        # stdout, stderr = process.communicate()
         if process.returncode != 0:
             print(f"Whisperx command failed with exit code {process.returncode}")
             print(f"Standard error output:\n{stderr}")
@@ -75,7 +79,7 @@ class AudioProcessor:
     def clear_data(self, src_path):
         files = os.listdir(src_path)
         for file in files:
-            if file.endswith('.wav') and not file.startswith('._'):
+            if file.endswith('.wav'):
                 # os.remove(os.path.join(src_path, file))
                 print("Deleting wav file jk: ", file)
 

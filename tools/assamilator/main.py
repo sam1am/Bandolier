@@ -63,9 +63,13 @@ class App:
     def add_folder(self):
         folder = os.path.normpath(filedialog.askdirectory())
         if folder:
-            self.config_handler.config.get('folder_list', []).append(folder)
+            if 'folder_list' not in self.config_handler.config:
+                self.config_handler.config['folder_list'] = []
+            self.config_handler.config['folder_list'].append(folder)
+
             self.folder_listbox.insert(tk.END, folder)
             self.config_handler.save_config()
+
 
     def set_vault(self):
         self.audio_processor.vault_dir = os.path.normpath(filedialog.askdirectory())
