@@ -61,14 +61,14 @@ class App:
         return button
 
     def add_folder(self):
-        folder = filedialog.askdirectory()
+        folder = os.path.normpath(filedialog.askdirectory())
         if folder:
             self.config_handler.config.get('folder_list', []).append(folder)
             self.folder_listbox.insert(tk.END, folder)
             self.config_handler.save_config()
 
     def set_vault(self):
-        self.audio_processor.vault_dir = filedialog.askdirectory()
+        self.audio_processor.vault_dir = os.path.normpath(filedialog.askdirectory())
         if not os.path.exists(self.audio_processor.vault_dir):
             os.makedirs(self.audio_processor.vault_dir)
         self.config_handler.config['vault_dir'] = self.audio_processor.vault_dir

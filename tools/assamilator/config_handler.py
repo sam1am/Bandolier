@@ -13,7 +13,8 @@ class ConfigHandler:
         self.vault_dir = self.config.get('vault_dir', self.default_vault_dir)
 
     def create_directory(self, directory_name):
-        directory_path = os.path.join(os.getcwd(), directory_name)
+        directory_path = os.path.normpath(os.path.join(os.getcwd(), directory_name))
+
         if not os.path.exists(directory_path):
             os.makedirs(directory_path)
         return directory_path

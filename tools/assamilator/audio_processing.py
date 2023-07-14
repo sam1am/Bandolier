@@ -23,6 +23,8 @@ class AudioProcessor:
         return 'int8' if platform.system() == 'Darwin' else 'float16'
 
     def copy_files(self, src_path, dst_path):
+        src_path = os.path.normpath(src_path)
+        dst_path = os.path.normpath(dst_path)
         files = os.listdir(src_path)
         for file in files:
             if file.lower().endswith('.wav'): 
@@ -85,6 +87,8 @@ class AudioProcessor:
             f.write(f"# Transcription of {file_name}\n\n{metadata}{transcription}")
 
     def process_folders(self, text_box, folder_listbox):
+        for folder in self.config_handler.config.get('folder_list', []):
+            folder = os.path.normpath(folder)
         text_box.configure(state='normal')  # Enable the text box
         text_box.insert(tk.END, "Starting Process...\n")
         for folder in self.config_handler.config.get('folder_list', []):
