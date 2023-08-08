@@ -27,6 +27,7 @@ with open(metadata_file_path, 'r') as f:
 
 # Define your query
 query = "Can I kill quagga mussels with sound waves?"
+print(f"Query: {query}\n\n")
 
 # Vectorize the query
 query_vector = vectorizer.transform([query]).toarray()[0]
@@ -41,5 +42,7 @@ for i in range(len(I[0])):
     for key in metadata:
         if metadata[key]['index_id'] == I[0][i]:
             print(f"Metadata: {metadata[key]}")
+            print(f"Relevant text: {metadata[key]['text']}")  # Print the relevant chunk of text
     print("\n")
+
 

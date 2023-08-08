@@ -11,8 +11,8 @@ import datetime
 import hashlib
 import pickle
 import argparse
+from sentence_transformers import SentenceTransformer
 
-# Define your directory here
 directory = '/Users/johngarfield/Library/CloudStorage/GoogleDrive-sam.garfield@gamp.ai/Shared drives/TNano'
 supported_file_types = ['docx', 'pdf', 'csv', 'txt', 'md']
 documents = []
@@ -21,7 +21,15 @@ log_file = 'log_file.txt'
 metadata = {}
 index_name = 'tnano'  # Define your user-defined index name
 workspace_directory = 'workspace'
-pickle_file_path = os.path.join(workspace_directory, 'vectorizer.pickle')
+index_directory = os.path.join(workspace_directory, index_name)
+
+# Create the directory if it doesn't exist
+if not os.path.exists(index_directory):
+    os.makedirs(index_directory)
+
+pickle_file_path = os.path.join(index_directory, 'vectorizer.pickle')
+
+model = SentenceTransformer('all-mpnet-base-v2')
 
 parser = argparse.ArgumentParser(description='Index documents')
 parser.add_argument('--reindex', action='store_true', help='Re-index documents')
@@ -40,18 +48,26 @@ def build_corpus(directory, supported_file_types):
                 try:
                     if file_path.endswith('.docx'):
                         doc = Document(file_path)
-                        text = ' '.join([p.text for p in doc.paragraphs])
+                        for p in doc.paragraphs:  # Iterate over paragraphs
+                            corpus.append(p.text)
                     elif file_path.endswith('.pdf'):
                         text = textract.process(file_path, method='pdfminer').decode('utf-8')
+                        # Split text into chunks. Here I'm using sentences as chunks, but you might want to adjust this.
+                        for sentence in text.split('.'):
+                            corpus.append(sentence)
                     elif file_path.endswith('.csv'):
                         df = pd.read_csv(file_path)
                         text = ' '.join(df.columns) + ' ' + ' '.join(df.values.flatten().astype(str))
-                    else: # For txt and md files
+                        for sentence in text.split('.'):
+                            corpus.append(sentence)
+                    else:  # For txt and md files
                         text = textract.process(file_path).decode('utf-8')
-                    corpus.append(text)
+                        for sentence in text.split('.'):
+                            corpus.append(sentence)
                 except Exception as e:
                     print(f"Error fitting {file_path}: {str(e)}")
     return corpus
+
 
 def refit_model(directory, supported_file_types, pickle_file_path):
     # Build the corpus
@@ -144,41 +160,40 @@ with open(log_file, 'w') as f:
     for skipped_file in skipped_files:
         f.write(skipped_file + '\n')
 
-# Read each document, extract its text, and vectorize it
+def extract_text(document):
+    if document.endswith('.docx'):
+        doc = Document(document)
+        return [p.text for p in doc.paragraphs]
+    elif document.endswith('.pdf'):
+        return textract.process(document, method='pdfminer').decode('utf-8').split('.')
+    elif document.endswith('.csv'):
+        df = pd.read_csv(document)
+        return (' '.join(df.columns) + ' ' + ' '.join(df.values.flatten().astype(str))).split('.')
+    else:  # For txt and md files
+        return textract.process(document).decode('utf-8').split('.')
+
 for document in documents:
     print("Indexing: " + document)
     try:
-        # Extract text from the document based on its file type
-        if document.endswith('.docx'):
-            doc = Document(document)
-            text = ' '.join([p.text for p in doc.paragraphs])
-        elif document.endswith('.pdf'):
-            # For pdf files
-            text = textract.process(document, method='pdfminer').decode('utf-8')
-        elif document.endswith('.csv'):
-            df = pd.read_csv(document)
-            text = ' '.join(df.columns) + ' ' + ' '.join(df.values.flatten().astype(str))
-        else: # For txt and md files
-            text = textract.process(document).decode('utf-8')
-
-        # Vectorize the text and add it to the index
-        vector = vectorizer.transform([text]).toarray()[0]
-        index.add_with_ids(np.array([vector], dtype=np.float32), np.array([len(metadata)]))
-        # Generate a unique ID for each file based on its content
-        file_id = hashlib.md5(open(document, 'rb').read()).hexdigest()
-        index_id = len(metadata)
-        metadata[file_id] = {
-            'file_path': document,
-            'file_type': document.split('.')[-1],
-            'indexing_date': str(datetime.datetime.now()),
-            'index_id': index_id,
-            # Add any other metadata here...
-        }
-        index.add_with_ids(np.array([vector], dtype=np.float32), np.array([index_id]))
-
+        chunks = extract_text(document)
+        for text in chunks:
+            text = text.strip()
+            vector = model.encode(text)  # Use the Sentence Transformer model to encode the text
+            vector = np.array([vector], dtype=np.float32)
+            index.add_with_ids(vector, np.array([len(metadata)]))
+            file_id = hashlib.md5(text.encode()).hexdigest()  # Use the chunk content to generate the ID
+            index_id = len(metadata)
+            metadata[file_id] = {
+                'file_path': document,
+                'file_type': document.split('.')[-1],
+                'indexing_date': str(datetime.datetime.now()),
+                'index_id': index_id,
+                'text': text,  # Add the chunk text to the metadata
+            }
     except Exception as e:
         print(f"Error processing {document}: {str(e)}")
         skipped_files.append(document)
+
 
 # Save the index to a file
 faiss.write_index(index, index_file_path)
