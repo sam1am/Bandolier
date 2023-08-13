@@ -161,3 +161,5 @@ cython_debug/
 config.json
 config.py
 tools/ingest/venvingest/
+tools/assamilator/config.json
+tools/assamilator/config.json

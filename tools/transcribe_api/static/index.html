@@ -85,85 +85,87 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script>
         let mediaRecorder;
-        let audioChunks = [];
-        const recordButton = document.getElementById('recordButton');
-        const fileInput = document.getElementById('fileInput');
-        const processButton = document.getElementById('processButton');
-        const transcription = document.getElementById('transcription');
-        const loading = document.getElementById('loading');
-        const loadingText = document.getElementById('loadingText');
+            let audioChunks = [];
+            const recordButton = document.getElementById('recordButton');
+            const fileInput = document.getElementById('fileInput');
+            const processButton = document.getElementById('processButton');
+            const transcription = document.getElementById('transcription');
+            const loading = document.getElementById('loading');
+            const loadingText = document.getElementById('loadingText');
 
-        fileInput.onchange = () => {
-            if(fileInput.files.length > 0) {
-                document.querySelector(".custom-file-label").innerText = fileInput.files[0].name;
-            }
-        }
-
-
-        navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(stream => {
-                mediaRecorder = new MediaRecorder(stream);
-
-                recordButton.addEventListener('click', () => {
-                    if (mediaRecorder.state === 'inactive') {
-                        audioChunks = [];
-                        mediaRecorder.start();
-                        recordButton.textContent = 'Stop Recording';
-                    } else {
-                        mediaRecorder.stop();
-                        recordButton.textContent = 'Start Recording';
-                    }
-                });
-
-                mediaRecorder.addEventListener("dataavailable", event => {
-                    audioChunks.push(event.data);
-                });
-
-                mediaRecorder.addEventListener("stop", () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                    const file = new File([audioBlob], "audio.wav", { type: 'audio/wav' });
-
-                    sendFile(file);
-                });
-            });
-
-        processButton.addEventListener('click', () => {
-            if (fileInput.files.length > 0) {
-                sendFile(fileInput.files[0]);
-            }
-        });
-
-        function sendFile(file) {
-            processButton.disabled = true;
-            loading.style.display = 'inline-block';
-            loadingText.style.display = 'inline-block';
-
-            const formData = new FormData();
-            formData.append('file', file);
-
-            fetch('https://scribe.nuiq.ai/transcribe', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    processButton.disabled = false;
-                    loading.style.display = 'none';
-                    loadingText.style.display = 'none';
-
-                    if (data.error) {
-                        transcription.value = 'Error: ' + data.error;
-                    } else {
-                        transcription.value = data.transcription;
+            fileInput.onchange = () => {
+                if (fileInput.files.length > 0) {
+                    document.querySelector(".custom-file-label").innerText = fileInput.files[0].name;
                 }
-            })
-            .catch(error => {
-                processButton.disabled = false;
-                loading.style.display = 'none';
-                loadingText.style.display = 'none';
-                transcription.value = 'Error: ' + error;
+            }
+
+            recordButton.addEventListener('click', () => {
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(stream => {
+                        mediaRecorder = new MediaRecorder(stream);
+
+                        if (mediaRecorder.state === 'inactive') {
+                            audioChunks = [];
+                            mediaRecorder.start();
+                            recordButton.textContent = 'Stop Recording';
+                        } else {
+                            mediaRecorder.stop();
+                            recordButton.textContent = 'Start Recording';
+                        }
+
+                        mediaRecorder.addEventListener("dataavailable", event => {
+                            audioChunks.push(event.data);
+                        });
+
+                        mediaRecorder.addEventListener("stop", () => {
+                            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                            const file = new File([audioBlob], "audio.wav", { type: 'audio/wav' });
+
+                            sendFile(file);
+                        });
+                    }).catch(e => {
+                        console.log('Error: ', e);
+                    });
             });
-        }
+
+            processButton.addEventListener('click', () => {
+                if (fileInput.files.length > 0) {
+                    sendFile(fileInput.files[0]);
+                }
+            });
+
+            function sendFile(file) {
+                processButton.disabled = true;
+                loading.style.display = 'inline-block';
+                loadingText.style.display = 'inline-block';
+
+                const formData = new FormData();
+                formData.append('file', file);
+
+                fetch('https://scribe.nuiq.ai/transcribe', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        processButton.disabled = false;
+                        loading.style.display = 'none';
+                        loadingText.style.display = 'none';
+
+                        if (data.error) {
+                            transcription.value = 'Error: ' + data.error;
+                        } else {
+                            transcription.value = data.transcription;
+                        }
+                    })
+                    .catch(error => {
+                        processButton.disabled = false;
+                        loading.style.display = 'none';
+                        loadingText.style.display = 'none';
+                        transcription.value = 'Error: ' + error;
+                    });
+            }
+
     </script>
 </body>
 
