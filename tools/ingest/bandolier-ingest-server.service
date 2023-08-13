@@ -1,0 +1,15 @@
+
+[Unit]
+Description=bandolier-ingest-server
+
+[Service]
+ExecStart=/home/sam/Documents/GitHub/Bandolier/tools/ingest/venvingest/bin/python /home/sam/Documents/GitHub/Bandolier/tools/ingest/server.py
+Restart=always
+User=sam
+Group=sam
+Environment=PATH=/home/sam/Documents/GitHub/Bandolier/tools/ingest/venvingest/bin
+WorkingDirectory=/home/sam/Documents/GitHub/Bandolier/tools/ingest
+
+[Install]
+WantedBy=multi-user.target
+
