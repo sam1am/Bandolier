@@ -1,0 +1,15 @@
+
+[Unit]
+Description=bandolier-assamilator-whisperx
+
+[Service]
+ExecStart=/home/sam/Documents/GitHub/Bandolier/tools/ingest/venvingest/bin/python /home/sam/Documents/GitHub/Bandolier/tools/assamilator/whisperx
+Restart=always
+User=sam
+Group=sam
+Environment=PATH=/home/sam/Documents/GitHub/Bandolier/tools/assamilator//bin
+WorkingDirectory=/home/sam/Documents/GitHub/Bandolier/tools/assamilator
+
+[Install]
+WantedBy=multi-user.target
+

@@ -18,6 +18,7 @@ class App:
         root.title("Assammilator")
         root.geometry("600x400")
         root.minsize(600, 400)
+        root.call('tk', 'scaling', 2.0)
 
         frame1 = self.create_frame(root)
         frame2 = self.create_frame(root)

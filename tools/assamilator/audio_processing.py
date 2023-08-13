@@ -20,7 +20,7 @@ class AudioProcessor:
         self.compute_type = self.detect_platform()
     
     def detect_platform(self):
-        return 'int8' if platform.system() == 'Darwin' else 'float32'
+        return 'int8' if platform.system() == 'Darwin' else 'float16'
 
     def copy_files(self, src_path, dst_path):
         src_path = os.path.normpath(src_path)
@@ -42,6 +42,8 @@ class AudioProcessor:
         else:
             cmd = f"whisperx '{abs_file_path}' --diarize --hf_token {hf_token} --compute_type {self.compute_type} --language en"
 
+        print ("Running command: " + cmd)
+        
         process = subprocess.Popen(
             cmd,
             shell=True,
@@ -125,32 +127,33 @@ class AudioProcessor:
                             output_path_escaped = os.path.join(self.vault_dir, file_name + '.opus').replace('"', '\\"')
 
 
-                            print("Saving Opus to : ", output_path_escaped)
+                            # print("Saving Opus to : ", output_path_escaped)
 
-                            command = f'ffmpeg -i "{file_path_escaped}" -c:a libopus -b:a 16k "{output_path_escaped}"'
-                            print("Running ffmpeg command: ", command)
-                            process = subprocess.Popen(
-                                command,
-                                shell=True,
-                                cwd=self.working_dir,
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE,
-                                text=True,
-                            )
-                            stdout, stderr = process.communicate()
-                            if process.returncode != 0:
-                                print(f"ffmpeg command failed with exit code {process.returncode}")
-                                print(f"Standard error output:\n{stderr}")
-                                return json.dumps({"error": stderr}), 500
-                            else:
-                                print(stdout)
+                            # command = f'ffmpeg -i "{file_path_escaped}" -c:a libopus -b:a 16k "{output_path_escaped}"'
+                            # print("Running ffmpeg command: ", command)
+                            # process = subprocess.Popen(
+                            #     command,
+                            #     shell=True,
+                            #     cwd=self.working_dir,
+                            #     stdout=subprocess.PIPE,
+                            #     stderr=subprocess.PIPE,
+                            #     text=True,
+                            # )
+                            # stdout, stderr = process.communicate()
+                            # if process.returncode != 0:
+                            #     print(f"ffmpeg command failed with exit code {process.returncode}")
+                            #     print(f"Standard error output:\n{stderr}")
+                            #     return json.dumps({"error": stderr}), 500
+                            # else:
+                            #     print(stdout)
                             print("Deleting wav file: ", file_path)
                             os.remove(os.path.join(self.working_dir, file))
-                            for file in os.listdir(self.working_dir):
-                                os.remove(os.path.join(self.working_dir, file))
-
-
                             text_box.insert(tk.END, f"Processed {file_name} and saved transcription to Obsidian vault.\n")
+                for file in os.listdir(self.working_dir):
+                    os.remove(os.path.join(self.working_dir, file))
+
+
+                            
                     if file.startswith('._'):
                         print("Deleting file: ", file)
                         os.remove(os.path.join(self.working_dir, file))
