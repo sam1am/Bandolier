@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Q Scribe API</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="p-5">
+    <div class="container">
+        <h1 class="mb-4">Q Scribe API</h1>
+        <button id="recordButton" class="btn btn-primary">Start Recording</button>
+        <div class="custom-file mt-3 mb-3">
+            <input type="file" class="custom-file-input" id="fileInput" accept="audio/mp4,audio/x-m4a,audio/mpeg,audio/aac,audio/wav">
+            <label class="custom-file-label" for="fileInput">Choose file</label>
+        </div>
+        <button id="processButton" class="btn btn-success">Process File</button>
+        <div id="loading" class="spinner-border text-success" role="status" style="display: none;">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <div id="loadingText" style="display: none;">Looking that over...</div>
+        <textarea id="transcription" class="form-control mt-3" readonly></textarea>
+    </div>
+
+    <details>
+        <summary><b>API Documentation</b></summary>
+        
+        ---
+        
+        <p>
+        <b>Endpoint:</b> /transcribe<br>
+        <b>Method:</b> POST
+        </p>
+        
+        <p>
+        <b>Description:</b><br>
+        This endpoint accepts an audio file and processes it, transcribing the content of the audio into text. This service is used to convert speech from a WAV format audio file into text.
+        </p>
+        
+        <p>
+        <b>Request:</b><br>
+        The request must be a multipart/form-data POST request. The audio file should be attached in the form field named "file". The file should be in .wav format.
+        </p>
+        
+        <p>
+        <b>Response:</b><br>
+        The response is a JSON object. Depending on the result of the transcription process, the response will have one of the following formats:
+        </p>
+        
+        <ul>
+        <li>If the transcription is successful, the JSON object will include a "transcription" field that contains a string of the transcribed audio.
+        <pre>
+        {
+            "transcription": "&lt;transcribed_text&gt;"
+        }
+        </pre>
+        </li>
+        
+        <li>If an error occurs during the transcription process, the JSON object will include an "error" field that describes what went wrong.
+        <pre>
+        {
+            "error": "&lt;error_description&gt;"
+        }
+        </pre>
+        </li>
+        </ul>
+        
+        <p>
+        <b>Possible HTTP response status codes:</b>
+        </p>
+        
+        <ul>
+        <li>200 OK: The request was successful, and the response body contains the result of the transcription.</li>
+        <li>400 Bad Request: The request was invalid or cannot be served. The exact error is provided in the response body (e.g., {"error": "No file uploaded"}).</li>
+        <li>500 Internal Server Error: There was an error in performing the transcription. The exact error is provided in the response body.</li>
+        </ul>
+        
+        <p>
+        <b>Note:</b><br>
+        Due to the complexity of the transcription process, there may be a considerable delay between the request and the response. Please remember to handle such conditions in your request management flow.
+        </p>
+        </details>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script>
+        let mediaRecorder;
+        let audioChunks = [];
+        const recordButton = document.getElementById('recordButton');
+        const fileInput = document.getElementById('fileInput');
+        const processButton = document.getElementById('processButton');
+        const transcription = document.getElementById('transcription');
+        const loading = document.getElementById('loading');
+        const loadingText = document.getElementById('loadingText');
+
+        fileInput.onchange = () => {
+            if(fileInput.files.length > 0) {
+                document.querySelector(".custom-file-label").innerText = fileInput.files[0].name;
+            }
+        }
+
+
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                mediaRecorder = new MediaRecorder(stream);
+
+                recordButton.addEventListener('click', () => {
+                    if (mediaRecorder.state === 'inactive') {
+                        audioChunks = [];
+                        mediaRecorder.start();
+                        recordButton.textContent = 'Stop Recording';
+                    } else {
+                        mediaRecorder.stop();
+                        recordButton.textContent = 'Start Recording';
+                    }
+                });
+
+                mediaRecorder.addEventListener("dataavailable", event => {
+                    audioChunks.push(event.data);
+                });
+
+                mediaRecorder.addEventListener("stop", () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const file = new File([audioBlob], "audio.wav", { type: 'audio/wav' });
+
+                    sendFile(file);
+                });
+            });
+
+        processButton.addEventListener('click', () => {
+            if (fileInput.files.length > 0) {
+                sendFile(fileInput.files[0]);
+            }
+        });
+
+        function sendFile(file) {
+            processButton.disabled = true;
+            loading.style.display = 'inline-block';
+            loadingText.style.display = 'inline-block';
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            fetch('https://scribe.nuiq.ai/transcribe', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    processButton.disabled = false;
+                    loading.style.display = 'none';
+                    loadingText.style.display = 'none';
+
+                    if (data.error) {
+                        transcription.value = 'Error: ' + data.error;
+                    } else {
+                        transcription.value = data.transcription;
+                }
+            })
+            .catch(error => {
+                processButton.disabled = false;
+                loading.style.display = 'none';
+                loadingText.style.display = 'none';
+                transcription.value = 'Error: ' + error;
+            });
+        }
+    </script>
+</body>
+
+</html>

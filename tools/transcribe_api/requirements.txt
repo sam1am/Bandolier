@@ -1,0 +1,8 @@
+flask 
+python-dotenv 
+pydub 
+flask_cors
+flask 
+python-dotenv 
+pydub 
+flask_cors
