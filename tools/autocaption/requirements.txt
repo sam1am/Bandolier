@@ -1,0 +1,8 @@
+git+https://github.com/huggingface/transformers.git
+fastapi
+Pillow
+torch
+accelerate
+uvicorn
+python-multipart
+clip

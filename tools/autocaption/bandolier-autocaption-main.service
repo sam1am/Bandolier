@@ -1,0 +1,13 @@
+
+[Unit]
+Description=bandolier-autocaption-main
+
+[Service]
+ExecStart=/home/sam/Documents/GitHub/Bandolier/tools/autocaption/venv-autocaption/bin/python -m uvicorn main.py:app --port 5003
+Restart=always
+User=sam
+Group=sam
+WorkingDirectory=/home/sam/Documents/GitHub/Bandolier/tools/autocaption
+
+[Install]
+WantedBy=multi-user.target

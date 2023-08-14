@@ -1,0 +1,13 @@
+
+[Unit]
+Description=bandolier-zipper-main
+
+[Service]
+ExecStart=/home/sam/Documents/GitHub/Bandolier/tools/zipper/venv-zipper/bin/python /home/sam/Documents/GitHub/Bandolier/tools/zipper/main.py
+Restart=always
+User=sam
+Group=sam
+WorkingDirectory=/home/sam/Documents/GitHub/Bandolier/tools/zipper
+
+[Install]
+WantedBy=multi-user.target

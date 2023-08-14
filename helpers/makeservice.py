@@ -5,6 +5,8 @@ import argparse
 # Create the parser
 parser = argparse.ArgumentParser(description='Python script to manage services.')
 parser.add_argument('-s', '--script_name', help='The Python script to run.')
+parser.add_argument('-u', '--uvicorn', action='store_true', help='Run as a Uvicorn service.')
+parser.add_argument('-p', '--port', type=int, default=8000, help='The port to run the service on.')
 args = parser.parse_args()
 
 # Get the current directory
@@ -31,13 +33,19 @@ elif not os.path.isfile(args.script_name):
 # Define the service and file name
 service_name = "bandolier-" + dirname + "-" + os.path.splitext(args.script_name)[0]
 
+# Check if the service should be run as a Uvicorn service
+if args.uvicorn:
+    exec_start = f"{python_path} -m uvicorn {args.script_name}:app --port {args.port}"
+else:
+    exec_start = f"{python_path} {os.path.join(dir, args.script_name)}"
+
 # Define the systemd service configuration
 config = f"""
 [Unit]
 Description={service_name}
 
 [Service]
-ExecStart={python_path} {os.path.join(dir, args.script_name)}
+ExecStart={exec_start}
 Restart=always
 User={user}
 Group={group}
