@@ -5,10 +5,13 @@ import requests
 import openai
 from typing import List
 from io import BytesIO
+import os
+from dotenv import load_dotenv
 
 app = FastAPI()
+load_dotenv()
 
-openai.api_key = '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'
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.post("/upload/")
 async def upload_image(file: UploadFile):

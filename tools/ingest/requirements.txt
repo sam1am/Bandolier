@@ -1,4 +1,4 @@
-faiss
+faiss-gpu
 numpy
 textract
 pandas

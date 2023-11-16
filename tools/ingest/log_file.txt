@@ -1,5 +1,6 @@
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Copy of TNANO_NTHERMA Production Model.xlsx
-/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/CNT Yarn Cost Estimator.xlsx
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Meeting Material Aug 10th.pptx
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/TNano Cost Estimator.xlsx
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/Ray5 5W Laser Engraver/Ray5 5W Laser Engraver.blend
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/Ray5 5W Laser Engraver/Ray5 5W Laser Engraver.blend1
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/Ray5 5W Laser Engraver/Reference/Ray5Reference.pur
@@ -12,6 +13,125 @@
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/Ray5 5W Laser Engraver/Circuit Board/Circuit Board Parts.blend
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/Ray5 5W Laser Engraver/Circuit Board/Motherboard-computer-texture-free-tech-stock-image-green-2.jpg
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/Ray5 5W Laser Engraver/Circuit Board/Circuit Board Parts.blend1
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/HydroSonix Speaker.blend
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/HydroSonixSpeaker How It Works V1.mp4
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/HydroSonixSpeaker How It Works V2 no logos.mp4
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Speaker Renders For Website.blend1
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/HydroSonixSpeaker How It Works V2.mp4
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/HydroSonix Speaker.blend1
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Speaker Renders For Website.blend
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Electrical Flow.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Argon Heat A_5.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Movement A.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Argon Heat A_2.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Movement C.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Heat A.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Heat B.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Heat C.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Movement B.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Argon Heat A.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Argon Heat A_4.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Argon Heat A_3.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Argon Heat B.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components/Componenets1.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components/Componenets6.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components/Componenets3.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components/Componenets5.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components/Componenets8.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components/Componenets4.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components/Componenets7.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components/Componenets2.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components/Componenets10.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components/Componenets9.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/CWW E2.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/CWW B.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/CWW F.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/CWW C.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/CWW D.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/CWW E.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/CWW H.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/CWW A.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/CWW G.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0012.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0011.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0029.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0003.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0027.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0017.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0018.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0039.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0032.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0036.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0038.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0001.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0021.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0031.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0028.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0026.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0007.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0014.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0008.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0019.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0037.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0020.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0025.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0022.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0004.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0035.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0009.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0024.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0002.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0016.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0010.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0015.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0030.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0033.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0023.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0006.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0034.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0005.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/Components With Wires/Vibration Animation A/VIBA0013.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0011.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0015.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0002.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0004.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0008.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0007.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0013.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0010.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0018.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0020.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0019.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0017.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0006.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0009.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0005.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0003.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0012.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0016.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0001.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Renders/MovementAnimation/MovementAnimation0014.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Images For Animation/sound waves.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Images For Animation/Sound WAves B.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Images For Animation/Electric_charge_symbol_negative.svg.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Images For Animation/Electric_charge_symbol_positive.svg.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Speaker Controller/HousingRef.JPG
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Speaker Controller/Speaker Controller.blend1
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Speaker Controller/Speaker Controller.blend
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Carbon Fiber Texture/Fabric004_PREVIEW.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Carbon Fiber Texture/Fabric004_2K_Metalness.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Carbon Fiber Texture/Fabric004_2K_Color.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Carbon Fiber Texture/Fabric004_2K_Displacement.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Carbon Fiber Texture/Fabric004_2K_NormalDX.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Carbon Fiber Texture/Fabric004_2K-JPG.usda
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Carbon Fiber Texture/Fabric004_2K-JPG.usdc
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Carbon Fiber Texture/Fabric004_2K_Roughness.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Carbon Fiber Texture/Fabric004_2K_NormalGL.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Speaker Frame/HydroSonix Speaker Frame.blend
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Speaker Frame/Speaker Frame Drawing.JPG
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/HydroSonix Speaker/Speaker Frame/HydroSonix Speaker Frame.blend1
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/Yarn Spool For Website/Yarn Spool For website.blend1
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/Yarn Spool For Website/Yarn Spool For website.blend
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/Firstnano Easytube 3000/Firstnano Easytube 3000.blend1
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/Firstnano Easytube 3000/Firstnano Easytube 3000.blend
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/3D Models/Firstnano Easytube 3000/Sketchfab Exports/Firstnano Easytube 3000 11jul.fbx
@@ -269,10 +389,85 @@
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/2023-07-29 - 2020-08-18 DWR Episode 11Fighting the STD of the Sea.wav
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/Wildlife Board Meeting 1 11 2018.mp4
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/Invasive Species.xlsx
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/Audio Tests/John and Nils test 1.aup3
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/Website Images/Quagga Frequency Chart.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/Website Images/Lake Water under a Microscope.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/Website Images/Veliger Images and Videos/All About Zebra Mussels.mp4
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/Website Images/Veliger Images and Videos/Silent Invaders Episode 2 Zebra & Quagga Mussels.mp4
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/Website Images/Veliger Images and Videos/Can zebra mussels be eradicated from Texas lakes KSAT Explains.mp4
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/Website Images/Veliger Images and Videos/The Biology of Zebra Mussels.mp4
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/Website Images/Veliger Images and Videos/VELIGER.mp4
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/Labs/mussel-laboratory-capacity_2023_Final-2 (3).xlsx
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX1/IMG_2339.JPG
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX1/IMG_2338.JPG
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Receipts from Ali/IMG_0545.JPG
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Receipts from Ali/IMG_0547.JPG
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Receipts from Ali/IMG_0550.JPG
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Receipts from Ali/IMG_0544.JPG
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Receipts from Ali/IMG_0546.JPG
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Receipts from Ali/IMG_0548.JPG
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Receipts from Ali/IMG_0549.JPG
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Amazon AMPS/Signal Generator and AMP.xlsx
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/2 Pieces-TopRight.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Case-Front.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Slide3-Mosfet switch.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Block Diagram.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/CoverOff-Top.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Slide1-Title.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Cover Off-TopRight.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Slide13-Case-RightFront.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Slide15-Amp-Rear.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Slide2-BlockDiagram.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Slide12-Case-Right.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Hydrosonix AMP.xlsx
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Slide11-Case-Top.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Case-Right-Side.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Circuit Board - Top.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Slide10-Case-right.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Slide9-Case-with-text.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Slide4-Alternative2PWM.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Case - Cut outs.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Mosfet Switch.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/2 Pieces-Top.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Slide8-BottomSupportPlate.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Slide7-CircuitBoard.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Slide6-Case.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/PWM.Front.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Circuit Board - Schematic.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Alternative2PWM.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Slide5-PWM.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Schematics/Slide14-AmpwithSpeaker.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/CircuitStudio/AMPX2/AMPX2.PrjPcb
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_9544.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_9430.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_9531.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_3904.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_9532.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_9486.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_3896.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_9537.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_9536.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_9428.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_9541.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_9543.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/Photos-001.zip
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_9530.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_3897.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_9484.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_9483.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_3895.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_9431.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_9485.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_9484 zoom.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_9487.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_9457.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_3898.jpg
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/AMPS/AMPX2/Photos of X2 from John/IMG_9535.jpg
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/Zebra and Quagga Mussels/Is there any stopping zebra mussels.mp4
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/Hydrosonix Patent/2021-08-31-06-200PR-FILED-DOCS.PDF
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/Hydrosonix Patent/Signed Agreements/2021.09.01.Signed.Patent.Agreements.zip
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/Partners/RMB Environmental/2023-08-04 Bob at RMB - Awesome.m4a
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/Youtube Videos/Carbon Nanotube Thinfilm Loudspeaker Demo.mp4
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/Sound Research/References.PDF
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Hydrosonix/Sound Research/E c o l o g y a n d DEC 5 19 94 United States Environmental Protection Agency Office of Research and Development Washington DC 20460 1891-1966-75 EPA_600_3-91_003 February 1991 Management of the Zebra Muss.PDF
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Keyance Microscopes/Wasatch Materials Show Images/20230322_174255.jpg
@@ -2039,6 +2234,7 @@
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Clients/Heet Shield Mat/Lab Process Animations/Nanotube Yarn Process/Renders Version 1/Part 1 Render 1/Patterning_Lab_Animation_P1_V10036.png
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Clients/Heet Shield Mat/Lab Process Animations/Nanotube Yarn Process/Renders Version 1/Part 1 Render 1/Patterning_Lab_Animation_P1_V10164.png
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Clients/Heet Shield Mat/Lab Process Animations/Nanotube Yarn Process/Renders Version 1/Part 1 Render 1/Patterning_Lab_Animation_P1_V10074.png
+/home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Clients/Heet Shield Mat/Lab Process Animations/Nanotube Yarn Process/Version 2/Render01_b_soundeffects.mp4
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Clients/Heet Shield Mat/Lab Process Animations/Nanotube Yarn Process/Version 2/Render01_a_4k.mp4
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Clients/Heet Shield Mat/Lab Process Animations/Nanotube Yarn Process/Version 2/Storyboard.psd
 /home/sam/Insync/sam.garfield@gamp.ai/Google Drive - Shared drives/TNano/Clients/Heet Shield Mat/Lab Process Animations/Nanotube Yarn Process/Version 2/Render01FirstDraft.mp4

@@ -1,0 +1,15 @@
+
+[Unit]
+Description=bandolier-transcribe_api
+
+[Service]
+ExecStart=/home/sam/Documents/GitHub/Bandolier/tools/transcribe_api/venv-transcribe-api/bin/python /home/sam/Documents/GitHub/Bandolier/tools/transcribe_api/server.py
+Restart=always
+User=sam
+Group=sam
+Environment=PATH=/home/sam/Documents/GitHub/Bandolier/tools/transcribe_api/venv-transcribe-api/bin
+WorkingDirectory=/home/sam/Documents/GitHub/Bandolier/tools/transcribe_api
+
+[Install]
+WantedBy=multi-user.target
+
