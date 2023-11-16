@@ -1,0 +1,3 @@
+flask
+slack_sdk
+python-env
