@@ -4,9 +4,9 @@ import hashlib
 from pathlib import Path
 from ItsPrompt.prompt import Prompt
 import openai
-import config
 import subprocess
 import pathspec
+from dotenv import load_dotenv  # Added this line
 
 IGNORE_LIST = [".git", "other_folder"]
 
@@ -19,7 +19,12 @@ IGNORE_LIST = [".git", "other_folder"]
 # 2. Use arrow keys to select/deselect files, press ENTER to continue.
 # 3. The code summary will be saved in the current directory as code_summary.md
 
-openai.api_key = config.OPENAI_API_KEY
+# Load .env file
+load_dotenv()  # Added this line
+
+# Fetch the API key
+openai.api_key = os.getenv("OPENAI_API_KEY")  # Modified this line
+
 
 # Creates a hidden directory to store the summary files
 def create_hidden_directory():
