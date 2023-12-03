@@ -1,3 +1,4 @@
 openai
 streamlit
 python-dotenv
+streamlit-aggrid

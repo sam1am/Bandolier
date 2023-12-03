@@ -9,6 +9,14 @@ def run_chat():
     """Run the chat application."""
     st.title('CortiCulum')
 
+    # Initialize session state for current conversation
+    if 'conversation' not in st.session_state:
+        st.session_state.conversation = None
+
+    # Initialize session state for Send button status
+    if 'sending' not in st.session_state:
+        st.session_state.sending = False
+
     # Create Settings panel
     name = st.text_input('What is your name?', value=get_user_name(), max_chars=20)
     set_user_name(name)
@@ -19,44 +27,47 @@ def run_chat():
     # Get list of past conversation files
     past_conversations = get_conversations()
 
-    # Add an option to start a new conversation
-    past_conversations.append('Start a new conversation')
+    selected_conversation = "Start a new conversation"
 
-    # Let the user select from past conversations or start a new one
-    selected_conversation = st.selectbox('Select a conversation', past_conversations)
-    
     # Create Conversations panel
     col1, col2 = st.columns([1,3])
-    
+
     with col1:
         st.subheader("Conversations")
-        convo_list = st.empty()  # placeholder for the conversation list
+        for convo in past_conversations:
+            if st.button(f"Load {convo}"):
+                st.session_state.conversation = convo
 
     # Create Messages panel
     with col2:
         st.subheader("Messages")
         message_display = st.empty()  # placeholder for the message display
-        user_message = st.text_input('Your message')
-    
-    # Only add system message when we start a new conversation
-    if selected_conversation == 'Start a new conversation':
-        selected_conversation = start_conversation()
-        add_message(selected_conversation, "System", get_system_message(selected_system_message))
-        # Initialize assistant with system message
-        for assistant_name in [selected_system_message]:
-            add_assistant(assistant_name)
-            add_to_history(assistant_name, 'system', get_system_message(selected_system_message))
-    
-    # Add user message and generate assistant response
-    if user_message:
-        add_message(selected_conversation, name, user_message)
-        add_to_history(selected_system_message, 'user', user_message)
-        assistant_message = generate_message(get_assistant(selected_system_message)['history'])
-        add_message(selected_conversation, selected_system_message, assistant_message)
-        add_to_history(selected_system_message, 'assistant', assistant_message)
 
-    # Update the conversation and message displays
-    convo_list.markdown("\n".join(get_conversations()))
-    message_display.markdown(get_conversation(selected_conversation))
+        with st.form(key='message_form'):
+            user_message = st.text_input('Your message', key='user_message')
+            submit_button = st.form_submit_button(label='Send', disabled=st.session_state.sending)
+
+        # Start a new conversation if there's none
+        if st.session_state.conversation is None:
+            st.session_state.conversation = start_conversation()
+            for assistant_name in [selected_system_message]:
+                add_assistant(assistant_name)
+                add_to_history(assistant_name, 'system', get_system_message(selected_system_message))
+
+        # Add user message and generate assistant response
+        if submit_button and user_message:
+            st.session_state.sending = True
+            add_message(st.session_state.conversation, name, user_message)
+            add_to_history(selected_system_message, 'user', user_message)
+            assistant_message = generate_message(get_assistant(selected_system_message)['history'])
+            add_message(st.session_state.conversation, selected_system_message, assistant_message)
+            add_to_history(selected_system_message, 'assistant', assistant_message)
+
+            # Here we clear the form and enable the Send button
+            st.session_state.sending = False
+            st.rerun()
+
+        # Update the message displays
+        message_display.markdown(get_conversation(st.session_state.conversation))
 
 run_chat()

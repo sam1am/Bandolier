@@ -17,8 +17,11 @@ Output of tree command:
 |-- app.py
 |-- assistants.py
 |-- conversations
-    |-- 2023-12-02-21-48-33.md
-    |-- 2023-12-02-21-53-23.md
+    |-- 2023-12-02-22-01-21.md
+    |-- 2023-12-02-22-01-23.md
+    |-- 2023-12-02-22-01-32.md
+    |-- 2023-12-02-22-01-33.md
+    |-- 2023-12-02-22-01-35.md
 |-- conversations.py
 |-- requirements.txt
 |-- system_messages.py
