@@ -20,8 +20,11 @@ def get_assistant(name):
         if assistant['name'] == name:
             return assistant
 
-def add_to_history(name, message):
+def add_to_history(name, role, message):
     """Add a message to an assistant's history."""
     assistant = get_assistant(name)
     if assistant:
-        assistant['history'].append(message)
+        assistant['history'].append({
+            'role': role,
+            'content': message
+        })
