@@ -8,7 +8,7 @@ import subprocess
 import pathspec
 from dotenv import load_dotenv  # Added this line
 
-IGNORE_LIST = [".git", "other_folder"]
+IGNORE_LIST = [".git", "venv"]
 
 
 # Allows users to select files from the current directory and create a code summary in markdown format.
@@ -162,6 +162,7 @@ def display_files():
     files = []
     gitignore_specs = parse_gitignore()
     for root, _, filenames in os.walk("."):
+
         # Check if the root directory is in the IGNORE_LIST
         if not any(ignore_item in root for ignore_item in IGNORE_LIST):
             for filename in filenames:
@@ -176,7 +177,7 @@ def select_files(files, previous_selection):
     gitignore_specs = parse_gitignore()
     filtered_files = [file for file in files if gitignore_specs is None or not gitignore_specs.match_file(file)]
 
-    print("\nUse arrow keys to select/deselect files, press ENTER to continue.")
+    print("\nUse arrow keys and spacebar to select/deselect files, press ENTER to continue.")
     selected_files = Prompt.checkbox(
         question="Select files",
         options=[(file, file) for file in filtered_files],

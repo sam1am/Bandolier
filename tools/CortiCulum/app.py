@@ -38,22 +38,22 @@ def run_chat():
         message_display = st.empty()  # placeholder for the message display
         user_message = st.text_input('Your message')
     
+    # Only add system message when we start a new conversation
     if selected_conversation == 'Start a new conversation':
         selected_conversation = start_conversation()
         add_message(selected_conversation, "System", get_system_message(selected_system_message))
-
-    # Add assistant messages to the conversation
-    for assistant_name in [selected_system_message]:
-        add_assistant(assistant_name)
-        add_message(selected_conversation, assistant_name, get_system_message(f"{assistant_name}"))
-
+        # Initialize assistant with system message
+        for assistant_name in [selected_system_message]:
+            add_assistant(assistant_name)
+            add_to_history(assistant_name, 'system', get_system_message(selected_system_message))
+    
+    # Add user message and generate assistant response
     if user_message:
         add_message(selected_conversation, name, user_message)
         add_to_history(selected_system_message, 'user', user_message)
         assistant_message = generate_message(get_assistant(selected_system_message)['history'])
         add_message(selected_conversation, selected_system_message, assistant_message)
         add_to_history(selected_system_message, 'assistant', assistant_message)
-
 
     # Update the conversation and message displays
     convo_list.markdown("\n".join(get_conversations()))

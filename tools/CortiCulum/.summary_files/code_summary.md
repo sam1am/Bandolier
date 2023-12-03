@@ -17,11 +17,10 @@ Output of tree command:
 |-- app.py
 |-- assistants.py
 |-- conversations
-    |-- 2023-11-30-14-14-17.md
-    |-- 2023-11-30-14-29-12.md
+    |-- 2023-12-02-21-48-33.md
+    |-- 2023-12-02-21-53-23.md
 |-- conversations.py
 |-- requirements.txt
-|-- system_messages
 |-- system_messages.py
 |-- user.py
 |-- utils.py
@@ -54,11 +53,14 @@ def get_assistant(name):
         if assistant['name'] == name:
             return assistant
 
-def add_to_history(name, message):
+def add_to_history(name, role, message):
     """Add a message to an assistant's history."""
     assistant = get_assistant(name)
     if assistant:
-        assistant['history'].append(message)
+        assistant['history'].append({
+            'role': role,
+            'content': message
+        })
 ```
 ---
 
@@ -95,7 +97,8 @@ def start_conversation():
 def add_message(filename, name, message):
     """Add a message to a conversation."""
     with open(os.path.join(CONVERSATIONS_DIR, filename), 'a') as file:
-        file.write(f'**{name}**: {message}\n')
+        file.write(f'**{name}**: {message}\n\n')  # added an extra newline
+
 ```
 ---
 
@@ -118,17 +121,18 @@ load_dotenv()
 openai.api_key = os.getenv('OPENAI_KEY')
 # openai.base_url = "https://..."
 
-def generate_message(prompt):
+def generate_message(messages):
     """Generate a message using the OpenAI API."""
     response = openai.chat.completions.create(
         model="gpt-4", 
-        messages=prompt,
+        messages=messages,
     )
 
-    message = response['choices'][0]['message']['content']
+    message = response.choices[0].message.content
     handle_json_response(response)
     
     return message
+
 
 def handle_json_response(response):
     """Handle JSON response from OpenAI API."""
@@ -217,29 +221,31 @@ def run_chat():
         message_display = st.empty()  # placeholder for the message display
         user_message = st.text_input('Your message')
     
+    # Only add system message when we start a new conversation
     if selected_conversation == 'Start a new conversation':
         selected_conversation = start_conversation()
         add_message(selected_conversation, "System", get_system_message(selected_system_message))
-
-    # Add assistant messages to the conversation
-    for assistant_name in [selected_system_message]:
-        add_assistant(assistant_name)
-        add_message(selected_conversation, assistant_name, get_system_message(f"{assistant_name}"))
-
+        # Initialize assistant with system message
+        for assistant_name in [selected_system_message]:
+            add_assistant(assistant_name)
+            add_to_history(assistant_name, 'system', get_system_message(selected_system_message))
+    
+    # Add user message and generate assistant response
     if user_message:
         add_message(selected_conversation, name, user_message)
-        assistant_message = generate_message(user_message)
+        add_to_history(selected_system_message, 'user', user_message)
+        assistant_message = generate_message(get_assistant(selected_system_message)['history'])
         add_message(selected_conversation, selected_system_message, assistant_message)
+        add_to_history(selected_system_message, 'assistant', assistant_message)
 
     # Update the conversation and message displays
     convo_list.markdown("\n".join(get_conversations()))
     message_display.markdown(get_conversation(selected_conversation))
 
-run_chat()
-```
+run_chat()```
 ---
 
 ./Team/default.md
 ```
-```
+You are P, an expert personal AI assistant, tech genius, full stack developer, and friend of Sam Garfield. ```
 ---

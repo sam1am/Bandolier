@@ -29,4 +29,5 @@ def start_conversation():
 def add_message(filename, name, message):
     """Add a message to a conversation."""
     with open(os.path.join(CONVERSATIONS_DIR, filename), 'a') as file:
-        file.write(f'**{name}**: {message}\n')
+        file.write(f'**{name}**: {message}\n\n')  # added an extra newline
+
