@@ -1,17 +1,31 @@
 #!/bin/bash
 
+# Function to add alias to the profile if it doesn't exist
+add_alias() {
+    local profile_path=$1
+    local alias_name=$2
+    local script=$3
+
+    # Check if this script is in the profile
+    local alias_command="alias ${alias_name}='${script}'"
+    if ! grep -q "${alias_command}" "${profile_path}"; then
+        echo "${alias_command}" >> "${profile_path}"
+        echo "Alias added. You might need to restart your terminal or run 'source ${profile_path}'"
+    else
+        echo "Alias already exists in your profile"
+    fi
+}
+
 #get the path of the script
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 GRANDPARENTDIR=$(dirname "$(dirname "$SCRIPTPATH")")
-#print each pasth
+
 echo "$SCRIPT"
 echo "$SCRIPTPATH"
-
-#echo the path
 echo "$GRANDPARENTDIR"
 
-#see if path exists at $SCRIPTPATH/venv/bin/activate"
+#see if virtual environment exists
 if [ -f "$SCRIPTPATH/venv/bin/activate" ]; then
     echo "venv exists"
 else
@@ -26,29 +40,41 @@ else
     deactivate
 fi
 
-# Check if this script is in the bash profile
-BASH_PROFILE_PATH=~/.bash_profile  # change this depending on shell
-ALIAS_NAME="code_summarize"  # change this to name you want for the alias
-ALIAS_COMMAND="alias $ALIAS_NAME='$SCRIPT'"
-if grep -Fxq "$ALIAS_COMMAND" $BASH_PROFILE_PATH
-then
-    echo "Alias already exists in your bash profile"
+# Alias handling
+DECLINE_RECORD=~/.bash_alias_decline
+BASH_PROFILE_PATH=~/.bash_profile
+BASHRC_PATH=~/.bashrc
+
+# Determine which shell profile exists
+if [ -f "$BASH_PROFILE_PATH" ]; then
+    PROFILE_PATH="$BASH_PROFILE_PATH"
+elif [ -f "$BASHRC_PATH" ]; then
+    PROFILE_PATH="$BASHRC_PATH"
 else
-    echo "Alias not found in your bash profile. Do you want to add it? (yes/no)"
+    echo "No .bash_profile or .bashrc detected. Alias will not be added."
+    exit 1
+fi
+
+ALIAS_NAME="code_summarize"
+ALIAS_EXISTS=$(grep -Fq "alias $ALIAS_NAME=" "$PROFILE_PATH" && echo 'yes' || echo 'no')
+
+# Check if the alias doesn't exist and the user hasn't previously declined
+if [[ "$ALIAS_EXISTS" == "no" && ! -f "$DECLINE_RECORD" ]]; then
+    echo "Alias not found in your profile. Do you want to add it? (yes/no)"
     read user_input
-    if [[ $user_input == 'yes' ]]
-    then
-        echo $ALIAS_COMMAND >> $BASH_PROFILE_PATH
-        echo "Alias added. You might need to restart your terminal or run 'source $BASH_PROFILE_PATH'"
-    else
-        echo "Okay, not adding alias"
+    if [[ $user_input == 'yes' ]]; then
+        add_alias "$PROFILE_PATH" "$ALIAS_NAME" "$SCRIPT"
+    elif [[ $user_input == 'no' ]]; then
+        # Record the user's decision to not add the alias
+        touch "$DECLINE_RECORD"
+        echo "Okay, not adding alias. This decision has been remembered."
     fi
 fi
 
-# Activate the virtual environment for the app, two levels up from the script location
+# Activate the virtual environment
 source "$SCRIPTPATH/venv/bin/activate"
 
-# Run the app in the script location
+# Run the app
 python "$SCRIPTPATH/app.py"
 
 # Deactivate the virtual environment
