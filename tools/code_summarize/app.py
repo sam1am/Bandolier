@@ -3,12 +3,16 @@ import json
 import hashlib
 from pathlib import Path
 from ItsPrompt.prompt import Prompt
-import openai
+from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
+
 import subprocess
 import pathspec
 from dotenv import load_dotenv  # Added this line
 
-IGNORE_LIST = [".git", "venv"]
+IGNORE_LIST = [".git", "venv", ".summary_files"]
 
 
 # Allows users to select files from the current directory and create a code summary in markdown format.
@@ -19,12 +23,7 @@ IGNORE_LIST = [".git", "venv"]
 # 2. Use arrow keys to select/deselect files, press ENTER to continue.
 # 3. The code summary will be saved in the current directory as code_summary.md
 
-# Load .env file
-load_dotenv()  # Added this line
-
-# Fetch the API key
-openai.api_key = os.getenv("OPENAI_API_KEY")  # Modified this line
-
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # Creates a hidden directory to store the summary files
 def create_hidden_directory():
@@ -53,32 +52,54 @@ def get_tree_output():
     tree_output = walk_directory_tree(".", 0, gitignore_specs)
     return tree_output
 
+# completion = client.chat.completions.create(
+#   model="gpt-4-1106-preview",
+#   messages=[
+#     {"role": "system", "content": "You are a helpful assistant."},
+#     {"role": "user", "content": "Hello!"}
+#   ]
+# )
+
+# print(completion.choices[0].message)
 
 def generate_summary(file_content):
     print("Waiting for summary. This may take a few minutes...")
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+
+    # Make the call to the OpenAI API to generate the summary
+    completion = client.chat.completions.create(
+        model="gpt-4-1106-preview",
         messages=[
-            {"role": "system", "content": "You are a code documenter. Your purpose is to provide useful summaries for inclusion"
-             " as reference for future prompts. Provide a concise summary of the given code and any notes that will be useful for other ChatBots to understand how it works."
-             " Include specific documentation about each function, class, and relevant parameters."},
+            {"role": "system", "content": "You are a code documenter. Your purpose is to provide useful summaries for "
+                                          "inclusion as reference for future prompts. Provide a concise summary of the "
+                                          "given code and any notes that will be useful for other ChatBots to understand how it works. "
+                                          "Include specific documentation about each function, class, and relevant parameters."},
             {"role": "user", "content": file_content}
         ],
-        max_tokens=2500,  # Adjust the token length as needed
+        max_tokens=2500
     )
-    return response['choices'][0]['message']['content']
+    
+    # Access the completion choice content directly
+    summary = completion.choices[0].message.content
+    return summary
 
 def generate_readme(compressed_summary):
-    print("Generating updated README.md file...")
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+    print("Generating updated READMfE.md file...")
+
+    # Make the call to the OpenAI API to generate the README content
+    completion = client.chat.completions.create(
+        model="gpt-4-1106-preview",
         messages=[
-            {"role": "system", "content": "You are a code documenter. Your task is to create an updated README.md file for a project using the compressed code summary provided. Make it look nice, use emoji, and include the following sections: Project Description, Installation, and Usage. You can also include a section for Acknowledgements and a section for License."},
+            {"role": "system", "content": "You are a code documenter. Your task is to create an updated README.md file for a project "
+                                          "using the compressed code summary provided. Make it look nice, use emoji, and include the "
+                                          "following sections: Project Description, Installation, and Usage. You can also include a "
+                                          "section for Acknowledgements and a section for License."},
             {"role": "user", "content": compressed_summary}
         ],
-        max_tokens=1500,  # Adjust the token length as needed
+        max_tokens=1500
     )
-    readme_content = response['choices'][0]['message']['content']
+    
+    # Access the completion choice content directly
+    readme_content = completion.choices[0].message.content
     return readme_content
 
 
@@ -240,16 +261,16 @@ def main():
         compressed_summary = f.read()
 
     # Generate updated README.md file using GPT-4
-    # readme_content = generate_readme(compressed_summary)
+    readme_content = generate_readme(compressed_summary)
 
     # Save the updated README.md file
-    # readme_file = Path("README.md")
+    readme_file = Path("README.md")
     # if readme_file.exists():
         
-    # with open(readme_file, "w") as f:
-    #     f.write(readme_content)
+    with open(readme_file, "w") as f:
+        f.write(readme_content)
 
-    # print("\nUpdated README.md file successfully generated in 'README.md'.")
+    print("\nUpdated README.md file successfully generated in 'README.md'.")
 
 if __name__ == "__main__":
     main()
