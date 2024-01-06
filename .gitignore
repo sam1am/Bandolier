@@ -163,3 +163,4 @@ config.py
 tools/ingest/venvingest/
 tools/assamilator/config.json
 tools/assamilator/config.json
+.DS_Store
