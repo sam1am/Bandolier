@@ -1,0 +1,24 @@
+.square {
+    border-radius: 5px;
+    background-color: lightgrey;
+    width: 30px;
+    height: 55px;
+    margin: 5px;
+}
+
+.marked {
+    background-color: turquoise;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 4px;
+    width: 100px;
+    margin-bottom: 1rem;
+}
+
+.grid-label {
+    text-align: center;
+}
