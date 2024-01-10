@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Set OpenAI API key
-openai.api_key = os.getenv('OPENAI_KEY')
+
 # openai.base_url = "https://..."
 
 def generate_message(messages):

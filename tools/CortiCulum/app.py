@@ -21,8 +21,16 @@ def run_chat():
     name = st.text_input('What is your name?', value=get_user_name(), max_chars=20)
     set_user_name(name)
 
-    assistants = get_system_messages()  # system_messages and assistants are now the same
-    selected_system_message = st.selectbox('Select a System Message / Assistant', assistants)
+    system_messages = get_system_messages()
+
+    # Initialize assistants from system messages if the assistants list is empty
+    for system_message in system_messages:
+        if get_assistant(system_message) is None:
+            add_assistant(system_message)
+
+    selected_system_message = st.selectbox('Select a System Message / Assistant', system_messages)
+    ...
+
 
     # Get list of past conversation files
     past_conversations = get_conversations()
@@ -38,6 +46,10 @@ def run_chat():
             if st.button(f"Load {convo}"):
                 st.session_state.conversation = convo
 
+    # Add a button for starting a new conversation
+    if st.button('Start New Conversation'):
+        st.session_state.conversation = start_conversation()
+
     # Create Messages panel
     with col2:
         st.subheader("Messages")
@@ -47,19 +59,15 @@ def run_chat():
             user_message = st.text_input('Your message', key='user_message')
             submit_button = st.form_submit_button(label='Send', disabled=st.session_state.sending)
 
-        # Start a new conversation if there's none
-        if st.session_state.conversation is None:
-            st.session_state.conversation = start_conversation()
-            for assistant_name in [selected_system_message]:
-                add_assistant(assistant_name)
-                add_to_history(assistant_name, 'system', get_system_message(selected_system_message))
-
         # Add user message and generate assistant response
-        if submit_button and user_message:
+        if submit_button and user_message and st.session_state.conversation is not None:
             st.session_state.sending = True
             add_message(st.session_state.conversation, name, user_message)
             add_to_history(selected_system_message, 'user', user_message)
-            assistant_message = generate_message(get_assistant(selected_system_message)['history'])
+            #get the history
+            history = get_assistant(selected_system_message)['history']
+            st.write("history: ", history)
+            assistant_message = generate_message(selected_system_message, history)
             add_message(st.session_state.conversation, selected_system_message, assistant_message)
             add_to_history(selected_system_message, 'assistant', assistant_message)
 
@@ -68,6 +76,7 @@ def run_chat():
             st.rerun()
 
         # Update the message displays
-        message_display.markdown(get_conversation(st.session_state.conversation))
+        if st.session_state.conversation is not None:
+            message_display.markdown(get_conversation(st.session_state.conversation))
 
 run_chat()

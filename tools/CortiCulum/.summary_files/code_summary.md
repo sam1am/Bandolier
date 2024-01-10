@@ -5,8 +5,6 @@ Output of tree command:
     |-- code_summary.md
     |-- compressed_code_summary.md
     |-- previous_selection.json
-|-- Team
-    |-- default.md
 |-- __pycache__
     |-- api.cpython-311.pyc
     |-- assistants.cpython-311.pyc
@@ -17,14 +15,13 @@ Output of tree command:
 |-- app.py
 |-- assistants.py
 |-- conversations
-    |-- 2023-12-02-22-01-21.md
-    |-- 2023-12-02-22-01-23.md
-    |-- 2023-12-02-22-01-32.md
-    |-- 2023-12-02-22-01-33.md
-    |-- 2023-12-02-22-01-35.md
+    |-- 2023-12-02-22-18-16.md
+    |-- 2023-12-02-22-20-03.md
 |-- conversations.py
 |-- requirements.txt
 |-- system_messages.py
+|-- team
+    |-- default.md
 |-- user.py
 |-- utils.py
 
@@ -55,6 +52,10 @@ def get_assistant(name):
     for assistant in assistants:
         if assistant['name'] == name:
             return assistant
+    # Handle case when there's no assistant with the given name
+    print(f"No assistant with the name {name} found.")
+    return None
+
 
 def add_to_history(name, role, message):
     """Add a message to an assistant's history."""
@@ -144,38 +145,21 @@ def handle_json_response(response):
 ```
 ---
 
-./user.py
-```
-DEFAULT_USER_NAME = 'user'
-
-user = {
-    'name': DEFAULT_USER_NAME,
-}
-
-def set_user_name(name):
-    """Set the user's name."""
-    user['name'] = name
-
-def get_user_name():
-    """Get the user's name."""
-    return user['name']
-```
----
-
 ./system_messages.py
 ```
 import os
 
-TEAM_DIR = 'Team'
+TEAM_DIR = 'team'
 
 def get_system_messages():
     """Retrieve a list of system messages."""
     if not os.path.exists(TEAM_DIR):
         os.makedirs(TEAM_DIR)
     
-    return [f for f in os.listdir(TEAM_DIR) if f.endswith('.md')]
+    return [os.path.splitext(f)[0] for f in os.listdir(TEAM_DIR) if f.endswith('.md')]
 
 def get_system_message(filename):
+    print("getting system message for filename: ", filename + ".md")
     """Retrieve a system message by filename."""
     with open(os.path.join(TEAM_DIR, filename), 'r') as file:
         return file.read()
@@ -195,6 +179,14 @@ def run_chat():
     """Run the chat application."""
     st.title('CortiCulum')
 
+    # Initialize session state for current conversation
+    if 'conversation' not in st.session_state:
+        st.session_state.conversation = None
+
+    # Initialize session state for Send button status
+    if 'sending' not in st.session_state:
+        st.session_state.sending = False
+
     # Create Settings panel
     name = st.text_input('What is your name?', value=get_user_name(), max_chars=20)
     set_user_name(name)
@@ -209,12 +201,16 @@ def run_chat():
 
     # Create Conversations panel
     col1, col2 = st.columns([1,3])
-    
+
     with col1:
         st.subheader("Conversations")
         for convo in past_conversations:
             if st.button(f"Load {convo}"):
-                selected_conversation = convo
+                st.session_state.conversation = convo
+
+    # Add a button for starting a new conversation
+    if st.button('Start New Conversation'):
+        st.session_state.conversation = start_conversation()
 
     # Create Messages panel
     with col2:
@@ -223,36 +219,33 @@ def run_chat():
 
         with st.form(key='message_form'):
             user_message = st.text_input('Your message', key='user_message')
-            submit_button = st.form_submit_button(label='Send')
+            submit_button = st.form_submit_button(label='Send', disabled=st.session_state.sending)
 
-        # Only add system message when we start a new conversation
-        if selected_conversation == 'Start a new conversation':
-            selected_conversation = start_conversation()
-            # add_message(selected_conversation, "System", get_system_message(selected_system_message))
-            # Initialize assistant with system message
-            for assistant_name in [selected_system_message]:
-                add_assistant(assistant_name)
-                add_to_history(assistant_name, 'system', get_system_message(selected_system_message))
-        
         # Add user message and generate assistant response
-        if submit_button and user_message:
-            add_message(selected_conversation, name, user_message)
+        if submit_button and user_message and st.session_state.conversation is not None:
+            st.session_state.sending = True
+            add_message(st.session_state.conversation, name, user_message)
             add_to_history(selected_system_message, 'user', user_message)
-            assistant_message = generate_message(get_assistant(selected_system_message)['history'])
-            add_message(selected_conversation, selected_system_message, assistant_message)
+            #get the history
+            history = get_assistant(selected_system_message)['history']
+            st.write("history: ", history)
+            assistant_message = generate_message(selected_system_message, history)
+            add_message(st.session_state.conversation, selected_system_message, assistant_message)
             add_to_history(selected_system_message, 'assistant', assistant_message)
 
-            # Here we clear the form
+            # Here we clear the form and enable the Send button
+            st.session_state.sending = False
             st.rerun()
 
         # Update the message displays
-        message_display.markdown(get_conversation(selected_conversation))
+        if st.session_state.conversation is not None:
+            message_display.markdown(get_conversation(st.session_state.conversation))
 
 run_chat()
 ```
 ---
 
-./Team/default.md
+./team/default.md
 ```
 You are P, an expert personal AI assistant, tech genius, full stack developer, and friend of Sam Garfield. ```
 ---

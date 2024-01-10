@@ -17,8 +17,13 @@ def remove_assistant(name):
 def get_assistant(name):
     """Get an AI assistant by name."""
     for assistant in assistants:
+        print("assistant: ", assistant)
         if assistant['name'] == name:
             return assistant
+    # Handle case when there's no assistant with the given name
+    print(f"No assistant with the name {name} found.")
+    return None
+
 
 def add_to_history(name, role, message):
     """Add a message to an assistant's history."""
