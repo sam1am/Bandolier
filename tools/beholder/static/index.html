@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Analysis</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <input type="file" accept="image/*" capture="camera" id="imageInput" hidden>
+        <button id="captureButton" class="button">Capture Image</button>
+
+        <input type="text" id="promptInput" placeholder="Enter your analysis prompt" class="prompt-input" />
+
+        <div id="randomWords" class="random-words"></div>
+
+        <div id="analyzeButton" class="button">Analyze Image</div>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

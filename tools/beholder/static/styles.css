@@ -1,0 +1,49 @@
+body,
+html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    height: 100%;
+}
+
+.button {
+    padding: 15px 30px;
+    font-size: 16px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.prompt-list {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.result {
+    margin-top: 20px;
+    text-align: center;
+    display: none;
+    /* Hidden until we have a result */
+}
+/* Add the rest of your previous CSS here */
+
+.prompt-input {
+    padding: 10px;
+    margin: 10px 0;
+    width: calc(100% - 20px);
+    font-size: 16px;
+}
+
+.random-words {
+    margin-top: 20px;
+    text-align: center;
+    display: none;
+    /* Hidden until image is being analyzed */
+}

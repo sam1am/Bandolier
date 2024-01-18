@@ -1,0 +1,3 @@
+Write a comedy-central style roast about the subjects in the image.
+Describe this image in as much detail as possible.
+Write a poem about this image in the style of Whitman.
