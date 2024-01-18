@@ -1,0 +1,7 @@
+models:
+  - name: "Model A"
+    model: "model_a_identifier"
+  - name: "Model B"
+    model: "model_b_identifier"
+  - name: "Model C"
+    model: "model_c_identifier"
