@@ -142,11 +142,27 @@ class CaptureScreen(tk.Frame):
         thread.start()
     
     def capture_and_process_image(self):
-        stream_url = 'rtsp://192.168.81.37:8554/mjpeg/1'
-        cap = cv2.VideoCapture(stream_url)
-        # Flush the buffer to grab the latest frame
-        for _ in range(30):
-            cap.grab()
+        # stream_url = 'rtsp://192.168.81.37:8554/mjpeg/1'
+        # cap = cv2.VideoCapture(stream_url)
+        # # Flush the buffer to grab the latest frame
+        # for _ in range(30):
+        #     cap.grab()
+        # ret, frame = cap.read()
+        # cap.release()
+        # if not ret:
+        #     # Logger.error('Capture: Failed to capture image from stream')
+        #     self.status_label.text = 'Failed to capture image.'
+        #     return
+        
+        # # Prepare image for POST request
+        # ret, buffer = cv2.imencode('.jpg', frame)
+        # if not ret:
+        #     # Logger.error('Capture: Failed to encode image to JPEG')
+        #     self.status_label.text = 'Failed to encode image.'
+        #     return
+        # encoded_image = base64.b64encode(buffer).tobytes()
+        # enable the webcame and take a picture, then disable the webcam
+        cap = cv2.VideoCapture(0)
         ret, frame = cap.read()
         cap.release()
         if not ret:
@@ -154,13 +170,6 @@ class CaptureScreen(tk.Frame):
             self.status_label.text = 'Failed to capture image.'
             return
         
-        # Prepare image for POST request
-        ret, buffer = cv2.imencode('.jpg', frame)
-        if not ret:
-            # Logger.error('Capture: Failed to encode image to JPEG')
-            self.status_label.text = 'Failed to encode image.'
-            return
-        encoded_image = base64.b64encode(buffer).tobytes()
 
         # Construct the prompt
         main_screen = self.manager.get_screen('main')
