@@ -113,20 +113,27 @@ class MainScreen(tk.Frame):
     def shutter_key_down(self, event):
         if not self.capture_initiated:
             self.capture_initiated = True
+            self.shutter_pressed_time = time.time()  # Capture current time
             self.master.bind('<KeyRelease-s>', self.shutter_key_up)
-            # capture and process image
-            self.master.after(3000, self.show_capture_screen)
+            # Start a new thread to check for capture initiation
+            threading.Thread(target=self.initiate_capture_if_held).start()
 
     def shutter_key_up(self, event):
         self.master.unbind('<KeyRelease-s>')
-        self.master.after_cancel(self.show_capture_screen)
-        time.sleep(10)
         self.capture_initiated = False
-    
+
+    def initiate_capture_if_held(self):
+        # Wait while checking if the key is still pressed and 3 seconds have elapsed
+        while self.capture_initiated:
+            if time.time() - self.shutter_pressed_time >= 3:
+                self.show_capture_screen()
+                break  # Exit the loop if capture has been initiated
+            time.sleep(0.1)  # Check every 0.1 seconds
+
     def show_capture_screen(self, event=None):
         self.capture_initiated = True
         self.capture_screen = CaptureScreen(self.master, self)
-        self.capture_screen.start_processing()
+        self.master.after(0, self.capture_screen.start_processing)
 
 
     
@@ -173,21 +180,17 @@ class CaptureScreen(tk.Frame):
         _, buffer = cv2.imencode('.jpg', frame)
         binary_image = buffer.tobytes()
 
-        # Construct the prompt
-        # main_screen = self.manager.get_screen('main')
         main_screen = self.main_screen
-        # category_index = main_screen.current_category_index
+
         category_index = self.main_screen.current_category_index
         item_index = self.main_screen.current_item_index
         prompt = self.main_screen.categories[category_index]['prompts'][item_index]['prompt']
-        # cap.release()
-        # Send the request to the API
         try:
             response = requests.post(
                 "https://roast.wayr.app/behold",
                 json={
                     "prompt": prompt,
-                    "image": binary_image
+                    "file": binary_image
                 },
                 timeout=10
             )
@@ -203,7 +206,6 @@ class CaptureScreen(tk.Frame):
 
         # Handle printing
         if self.main_screen.printing_enabled:
-            # Printing logic (You might need to update this if you have a specific printer setup)
             try:
                 with open('/dev/usb/lp0', 'w') as printer:
                     printer.write(response_text + '\n\n\n\n\n')
@@ -225,9 +227,7 @@ class PoetroidApp(tk.Tk):
         super().__init__()
         self.geometry('480x800')
         self.main_screen = MainScreen(self)
-        #go ofull screen
-        self.attributes('-fullscreen', True)
-        # self.capture_screen = CaptureScreen(self)  # You can toggle this screen when you need to capture and process images.
+        self.attributes('-fullscreen', True)        
 
 if __name__ == '__main__':
     app = PoetroidApp()
