@@ -184,7 +184,8 @@ class CaptureScreen(tk.Frame):
         encoded_image = base64.b64encode(frame).decode('utf-8')
 
         # Construct the prompt
-        main_screen = self.manager.get_screen('main')
+        # main_screen = self.manager.get_screen('main')
+        main_screen = self.main_screen
         # category_index = main_screen.current_category_index
         category_index = self.main_screen.current_category_index
         item_index = self.main_screen.current_item_index
