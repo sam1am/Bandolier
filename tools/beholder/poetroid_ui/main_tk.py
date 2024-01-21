@@ -7,7 +7,7 @@ import cv2
 import base64
 import requests
 import time
-import logging 
+import logging
 
 class MainScreen(tk.Frame):
     def __init__(self, master):
@@ -124,9 +124,10 @@ class MainScreen(tk.Frame):
         self.capture_initiated = False
     
     def show_capture_screen(self, event=None):
-        self.master.unbind('<KeyRelease-s>')
+        self.capture_initiated = True
         self.capture_screen = CaptureScreen(self.master, self)
         self.capture_screen.start_processing()
+
 
     
 class CaptureScreen(tk.Frame):
@@ -143,19 +144,6 @@ class CaptureScreen(tk.Frame):
         self.status_label.config(text='Thinking...')
         thread = threading.Thread(target=self.capture_and_process_image)
         thread.start()
-    
-    # def find_working_camera_index(null):
-    #     index = 0
-    #     while True:
-    #         cap = cv2.VideoCapture(index)
-    #         if cap.read()[0]:
-    #             cap.release()
-    #             print(f"Found working camera at index {index}")
-    #             return index
-    #         cap.release()
-    #         index += 1
-    #         if index > 10:  # Prevent an infinite loop by setting a limit on the indices to check
-    #             raise IOError("No working camera found within index range 0-10.")
 
     
     def capture_and_process_image(self):
@@ -197,7 +185,7 @@ class CaptureScreen(tk.Frame):
                 "https://roast.wayr.app/behold",
                 json={
                     "prompt": prompt,
-                    "image": encoded_image.decode('utf-8')
+                    "image": encoded_image
                 },
                 timeout=10
             )
@@ -209,32 +197,34 @@ class CaptureScreen(tk.Frame):
             self.status_label.text = 'Failed to get response.'
 
     def display_response(self, response_text):
-        self.status_label.text = response_text
+        self.status_label['text'] = response_text
 
         # Handle printing
-        main_screen = self.manager.get_screen('main')
-        if main_screen.printing_enabled:
+        if self.main_screen.printing_enabled:
+            # Printing logic (You might need to update this if you have a specific printer setup)
             try:
                 with open('/dev/usb/lp0', 'w') as printer:
                     printer.write(response_text + '\n\n\n\n\n')
             except IOError as e:
-                # Logger.error(f'Print: Failed to print to /dev/usb/lp0: {e}')
-                self.status_label.text = 'Failed to print.'
-        
+                logging.error(f'Print: Failed to print to /dev/usb/lp0: {e}')
+                self.status_label['text'] = 'Failed to print.'
+
         # Add a button to go back to the main screen
-        go_back_button = Button(text='Go back', size_hint_y=0.1)
-        go_back_button.bind(on_press=self.go_back_to_main)
-        self.add_widget(go_back_button)
+        go_back_button = tk.Button(self, text='Go back', command=self.go_back_to_main)
+        go_back_button.pack()
 
     def go_back_to_main(self):
         self.destroy()  # Remove the capture screen from view
-        self.master.main_screen.update_ui()
+        self.main_screen.update_ui()
+
 
 class PoetroidApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.geometry('480x800')
         self.main_screen = MainScreen(self)
+        #go ofull screen
+        self.attributes('-fullscreen', True)
         # self.capture_screen = CaptureScreen(self)  # You can toggle this screen when you need to capture and process images.
 
 if __name__ == '__main__':
