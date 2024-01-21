@@ -111,7 +111,7 @@ class MainScreen(tk.Frame):
     
     # trigger capture screen when held for three seconds
     def shutter_key_down(self, event):
-        if not self.capture_initiated
+        if not self.capture_initiated:
             self.capture_initiated = True
             self.master.bind('<KeyRelease-s>', self.shutter_key_up)
             self.master.after(3000, self.initiate_capture)
