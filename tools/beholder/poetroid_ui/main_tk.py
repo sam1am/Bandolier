@@ -187,7 +187,7 @@ class CaptureScreen(tk.Frame):
                 "https://roast.wayr.app/behold",
                 json={
                     "prompt": prompt,
-                    "image": encoded_image
+                    "image": binary_image
                 },
                 timeout=10
             )
