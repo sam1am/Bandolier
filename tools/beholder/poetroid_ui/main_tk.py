@@ -114,7 +114,8 @@ class MainScreen(tk.Frame):
         if not self.capture_initiated:
             self.capture_initiated = True
             self.master.bind('<KeyRelease-s>', self.shutter_key_up)
-            self.master.after(3000, self.initiate_capture)
+            # capture and process image
+            self.master.after(3000, self.show_capture_screen)
 
     def shutter_key_up(self, event):
         self.master.unbind('<KeyRelease-s>')
@@ -143,18 +144,18 @@ class CaptureScreen(tk.Frame):
         thread = threading.Thread(target=self.capture_and_process_image)
         thread.start()
     
-    def find_working_camera_index(null):
-        index = 0
-        while True:
-            cap = cv2.VideoCapture(index)
-            if cap.read()[0]:
-                cap.release()
-                print(f"Found working camera at index {index}")
-                return index
-            cap.release()
-            index += 1
-            if index > 10:  # Prevent an infinite loop by setting a limit on the indices to check
-                raise IOError("No working camera found within index range 0-10.")
+    # def find_working_camera_index(null):
+    #     index = 0
+    #     while True:
+    #         cap = cv2.VideoCapture(index)
+    #         if cap.read()[0]:
+    #             cap.release()
+    #             print(f"Found working camera at index {index}")
+    #             return index
+    #         cap.release()
+    #         index += 1
+    #         if index > 10:  # Prevent an infinite loop by setting a limit on the indices to check
+    #             raise IOError("No working camera found within index range 0-10.")
 
     
     def capture_and_process_image(self):
