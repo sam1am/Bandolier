@@ -141,35 +141,30 @@ class CaptureScreen(tk.Frame):
         thread = threading.Thread(target=self.capture_and_process_image)
         thread.start()
     
+    def find_working_camera_index(null):
+        index = 0
+        while True:
+            cap = cv2.VideoCapture(index)
+            if cap.read()[0]:
+                cap.release()
+                print(f"Found working camera at index {index}")
+                return index
+            cap.release()
+            index += 1
+            if index > 10:  # Prevent an infinite loop by setting a limit on the indices to check
+                raise IOError("No working camera found within index range 0-10.")
+
+    
     def capture_and_process_image(self):
-        # stream_url = 'rtsp://192.168.81.37:8554/mjpeg/1'
-        # cap = cv2.VideoCapture(stream_url)
-        # # Flush the buffer to grab the latest frame
-        # for _ in range(30):
-        #     cap.grab()
-        # ret, frame = cap.read()
-        # cap.release()
-        # if not ret:
-        #     # Logger.error('Capture: Failed to capture image from stream')
-        #     self.status_label.text = 'Failed to capture image.'
-        #     return
-        
-        # # Prepare image for POST request
-        # ret, buffer = cv2.imencode('.jpg', frame)
-        # if not ret:
-        #     # Logger.error('Capture: Failed to encode image to JPEG')
-        #     self.status_label.text = 'Failed to encode image.'
-        #     return
-        # encoded_image = base64.b64encode(buffer).tobytes()
-        # enable the webcame and take a picture, then disable the webcam
-        cap = cv2.VideoCapture(0)
+        camera_index = self.find_working_camera_index()
+        cap = cv2.VideoCapture(camera_index)
         ret, frame = cap.read()
         cap.release()
         if not ret:
             # Logger.error('Capture: Failed to capture image from stream')
             self.status_label.text = 'Failed to capture image.'
             return
-        
+        encoded_image = base64.b64encode(frame).decode('utf-8')
 
         # Construct the prompt
         main_screen = self.manager.get_screen('main')
