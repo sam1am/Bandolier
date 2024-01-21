@@ -156,8 +156,19 @@ class CaptureScreen(tk.Frame):
 
     
     def capture_and_process_image(self):
-        camera_index = self.find_working_camera_index()
-        cap = cv2.VideoCapture(camera_index)
+        camera_indices = [1, 2]
+        frame = None
+        for camera_index in camera_indices:
+            cap = cv2.VideoCapture(camera_index)
+            ret, frame = cap.read()
+            cap.release()
+            if ret:
+                break  # We found a working camera index, so we can break out of the loop
+
+        if frame is None:
+            self.status_label['text'] = 'Failed to capture image from any known camera index.'
+            return
+
         ret, frame = cap.read()
         cap.release()
         if not ret:
