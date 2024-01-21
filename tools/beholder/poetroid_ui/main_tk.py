@@ -109,44 +109,28 @@ class MainScreen(tk.Frame):
         else:
             self.toggle_item(direction)
     
-    # trigger capture screen when held for three seconds
     def shutter_key_down(self, event):
         if not self.capture_initiated:
             self.capture_initiated = True
             self.capture_screen = CaptureScreen(self.master, self)
             self.master.after(0, self.capture_screen.start_processing)
 
-    # def shutter_key_up(self, event):
-    #     self.master.unbind('<KeyRelease-s>')
-    #     self.capture_initiated = False
-
-    # def initiate_capture_if_held(self):
-    #     # Wait while checking if the key is still pressed and 3 seconds have elapsed
-    #     while self.capture_initiated:
-    #         if time.time() - self.shutter_pressed_time >= 3:
-    #             self.show_capture_screen()
-    #             break  # Exit the loop if capture has been initiated
-    #         time.sleep(0.1)  # Check every 0.1 seconds
-
-    # def show_capture_screen(self, event=None):
-        
-
-
     
-class CaptureScreen(tk.Frame):
+class CaptureScreen(tk.Toplevel):
     def __init__(self, master, main_screen):
         super().__init__(master)
-        self.master = master
         self.main_screen = main_screen  # Reference to MainScreen
         self.status_label = tk.Label(self, text='Thinking...')
         self.status_label.pack()
-        self.pack()
-
 
     def start_processing(self):
-        self.status_label.config(text='Thinking...')
-        thread = threading.Thread(target=self.capture_and_process_image)
-        thread.start()
+        camera_index = 1  # Replace with the correct camera index from your tests
+        cap = cv2.VideoCapture(camera_index)
+        if not cap.isOpened():
+            # Load a test image if no camera is found
+            self.display_test_image('./poetroid.png')
+            return
+
 
     
     def capture_and_process_image(self):
@@ -167,12 +151,9 @@ class CaptureScreen(tk.Frame):
                 self.status_label['text'] = "Error: Could not read frame from the camera during warm-up."
                 cap.release()
                 return
-        # cap.release()
         if not ret:
-            # Logger.error('Capture: Failed to capture image from stream')
             self.status_label.text = 'Failed to capture image.'
             return
-        # encoded_image = base64.b64encode(frame).decode('utf-8')
         _, buffer = cv2.imencode('.jpg', frame)
         binary_image = buffer.tobytes()
 
@@ -213,8 +194,21 @@ class CaptureScreen(tk.Frame):
         go_back_button = tk.Button(self, text='Go back', command=self.go_back_to_main)
         go_back_button.pack()
 
-    def go_back_to_main(self):
-        self.destroy()  # Remove the capture screen from view
+    def display_test_image(self, image_path):
+        img = Image.open(image_path)
+        photo = ImageTk.PhotoImage(img)
+        label = tk.Label(self, image=photo)
+        label.image = photo  # Keep a reference.
+        label.pack()
+        self.show_reset_button()
+
+    def show_reset_button(self):
+        reset_button = tk.Button(self, text='Reset', command=self.reset_to_main)
+        reset_button.pack()
+
+    def reset_to_main(self):
+        self.destroy()  # Close the capture screen
+        self.main_screen.master.deiconify()  # Show the main screen
         self.main_screen.update_ui()
 
 
