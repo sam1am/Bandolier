@@ -156,21 +156,24 @@ class CaptureScreen(tk.Frame):
 
     
     def capture_and_process_image(self):
-        camera_indices = [1, 2]
-        frame = None
-        for camera_index in camera_indices:
-            cap = cv2.VideoCapture(camera_index)
-            ret, frame = cap.read()
-            cap.release()
-            if ret:
-                break  # We found a working camera index, so we can break out of the loop
-
-        if frame is None:
-            self.status_label['text'] = 'Failed to capture image from any known camera index.'
+        camera_index = 1  # Replace with the correct camera index from your tests
+        cap = cv2.VideoCapture(camera_index)
+        if not cap.isOpened():
+            self.status_label['text'] = f"Error: Could not open camera at index {camera_index}."
             return
 
-        ret, frame = cap.read()
-        cap.release()
+        warm_up_time = 2  # Warm-up time in seconds
+        start_time = time.time()
+        
+        # Warm-up phase: Capture and discard frames for the warm-up period
+        print("Warming up the camera...")
+        while time.time() - start_time < warm_up_time:
+            ret, frame = cap.read()
+            if not ret:
+                self.status_label['text'] = "Error: Could not read frame from the camera during warm-up."
+                cap.release()
+                return
+        # cap.release()
         if not ret:
             # Logger.error('Capture: Failed to capture image from stream')
             self.status_label.text = 'Failed to capture image.'
@@ -182,7 +185,7 @@ class CaptureScreen(tk.Frame):
         category_index = main_screen.current_category_index
         item_index = main_screen.current_item_index
         prompt = main_screen.categories[category_index]['prompts'][item_index]['prompt']
-        
+        cap.release()
         # Send the request to the API
         try:
             response = requests.post(
