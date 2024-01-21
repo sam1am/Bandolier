@@ -1,34 +1,43 @@
 import cv2
+import time
 
-def stream_camera(camera_index):
+def test_camera(camera_index):
     cap = cv2.VideoCapture(camera_index)
     if not cap.isOpened():
         print(f"Error: Could not open camera at index {camera_index}.")
         return
-
-    print("Streaming... Press 'q' to quit.")
     
-    while True:
-        # Capture a single frame
+    warm_up_time = 2  # seconds
+    start_time = time.time()
+    
+    print("Warming up the camera...")
+    while time.time() - start_time < warm_up_time:
         ret, frame = cap.read()
         if not ret:
-            print("Error: Could not read frame from the camera.")
-            break
-        
-        # Display the resulting frame
-        cv2.imshow(f'Camera Live Feed - Index {camera_index}', frame)
-        
-        # If 'q' is pressed on the keyboard, exit the loop
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-    # When everything done, release the capture
+            print("Error: Could not read frame from the camera during warm-up.")
+            cap.release()
+            return
+    
+    # After the warm-up, capture one frame to display
+    ret, frame = cap.read()
+    if not ret:
+        print("Error: Failed to capture the frame.")
+        cap.release()
+        return
+    
+    # Display the captured frame
+    cv2.imshow(f'Camera Test - Index {camera_index}', frame)
+    
+    # Press any key to exit
+    print("Press any key to close the window")
+    cv2.waitKey(0)
+    
+    # Cleanup
     cap.release()
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    # Start streaming from the first camera index detected
-    stream_camera(1)
-    # If index 0 didn't work, you can try other indices like 1, 2, etc.
-    # stream_camera(1)
-    # stream_camera(2)
+    # Replace with the correct camera index
+    camera_index = 1
+    test_camera(camera_index)
+    # Repeat with different indices, if necessary
