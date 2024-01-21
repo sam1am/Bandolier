@@ -113,27 +113,23 @@ class MainScreen(tk.Frame):
     def shutter_key_down(self, event):
         if not self.capture_initiated:
             self.capture_initiated = True
-            self.shutter_pressed_time = time.time()  # Capture current time
-            self.master.bind('<KeyRelease-s>', self.shutter_key_up)
-            # Start a new thread to check for capture initiation
-            threading.Thread(target=self.initiate_capture_if_held).start()
+            self.capture_screen = CaptureScreen(self.master, self)
+            self.master.after(0, self.capture_screen.start_processing)
 
-    def shutter_key_up(self, event):
-        self.master.unbind('<KeyRelease-s>')
-        self.capture_initiated = False
+    # def shutter_key_up(self, event):
+    #     self.master.unbind('<KeyRelease-s>')
+    #     self.capture_initiated = False
 
-    def initiate_capture_if_held(self):
-        # Wait while checking if the key is still pressed and 3 seconds have elapsed
-        while self.capture_initiated:
-            if time.time() - self.shutter_pressed_time >= 3:
-                self.show_capture_screen()
-                break  # Exit the loop if capture has been initiated
-            time.sleep(0.1)  # Check every 0.1 seconds
+    # def initiate_capture_if_held(self):
+    #     # Wait while checking if the key is still pressed and 3 seconds have elapsed
+    #     while self.capture_initiated:
+    #         if time.time() - self.shutter_pressed_time >= 3:
+    #             self.show_capture_screen()
+    #             break  # Exit the loop if capture has been initiated
+    #         time.sleep(0.1)  # Check every 0.1 seconds
 
-    def show_capture_screen(self, event=None):
-        self.capture_initiated = True
-        self.capture_screen = CaptureScreen(self.master, self)
-        self.master.after(0, self.capture_screen.start_processing)
+    # def show_capture_screen(self, event=None):
+        
 
 
     
