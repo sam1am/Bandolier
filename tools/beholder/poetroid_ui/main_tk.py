@@ -111,30 +111,32 @@ class MainScreen(tk.Frame):
     
     # trigger capture screen when held for three seconds
     def shutter_key_down(self, event):
-        if not self.capture_initiated:
+        if not self.capture_initiated and not self.capture_started:
             self.capture_initiated = True
             self.master.bind('<KeyRelease-s>', self.shutter_key_up)
-            self.master.after(3000, self.show_capture_screen)
+            self.master.after(3000, self.initiate_capture)
 
     def shutter_key_up(self, event):
         self.master.unbind('<KeyRelease-s>')
         self.master.after_cancel(self.show_capture_screen)
-        time.sleep(1)
+        time.sleep(10)
         self.capture_initiated = False
     
     def show_capture_screen(self, event=None):
         self.master.unbind('<KeyRelease-s>')
-        self.capture_screen = CaptureScreen(self.master)
+        self.capture_screen = CaptureScreen(self.master, self)
         self.capture_screen.start_processing()
 
     
 class CaptureScreen(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master, main_screen):
         super().__init__(master)
         self.master = master
+        self.main_screen = main_screen  # Reference to MainScreen
         self.status_label = tk.Label(self, text='Thinking...')
         self.status_label.pack()
         self.pack()
+
 
     def start_processing(self):
         self.status_label.config(text='Thinking...')
@@ -182,10 +184,11 @@ class CaptureScreen(tk.Frame):
 
         # Construct the prompt
         main_screen = self.manager.get_screen('main')
-        category_index = main_screen.current_category_index
-        item_index = main_screen.current_item_index
-        prompt = main_screen.categories[category_index]['prompts'][item_index]['prompt']
-        cap.release()
+        # category_index = main_screen.current_category_index
+        category_index = self.main_screen.current_category_index
+        item_index = self.main_screen.current_item_index
+        prompt = self.main_screen.categories[category_index]['prompts'][item_index]['prompt']
+        # cap.release()
         # Send the request to the API
         try:
             response = requests.post(
