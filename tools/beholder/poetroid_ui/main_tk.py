@@ -169,7 +169,9 @@ class CaptureScreen(tk.Frame):
             # Logger.error('Capture: Failed to capture image from stream')
             self.status_label.text = 'Failed to capture image.'
             return
-        encoded_image = base64.b64encode(frame).decode('utf-8')
+        # encoded_image = base64.b64encode(frame).decode('utf-8')
+        _, buffer = cv2.imencode('.jpg', frame)
+        binary_image = buffer.tobytes()
 
         # Construct the prompt
         # main_screen = self.manager.get_screen('main')
