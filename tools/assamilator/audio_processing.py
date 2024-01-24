@@ -70,8 +70,18 @@ class AudioProcessor:
         print("Found .vtt files: ", vtt_files)
         if not vtt_files:
             return json.dumps({"error": "No .vtt files found"}), 500
+        import re
+        from datetime import timedelta
+        creation_time = os.path.getctime(abs_file_path)
         with open(vtt_files[0], "r") as f:
             lines = f.readlines()[2:]
+            for i, line in enumerate(lines):
+                match = re.search(r'(\d+):(\d+):(\d+)\.(\d+)', line)
+                if match:
+                    hours, minutes, seconds, milliseconds = map(int, match.groups())
+                    timestamp = timedelta(hours=hours, minutes=minutes, seconds=seconds, milliseconds=milliseconds)
+                    adjusted_timestamp = timestamp + timedelta(seconds=creation_time)
+                    lines[i] = line.replace(match.group(), str(adjusted_timestamp))
             transcription = ''.join(lines)
 
         shutil.rmtree(dir_name)
@@ -90,7 +100,7 @@ class AudioProcessor:
         #add filename.opus to the metadata
         metadata = f"---\ndataview\ntimestamp: {timestamp}\n---\n![[{file_name}.opus]]\n\n"
         with open(os.path.join(self.vault_dir, file_name + ' Transcript.md'), 'w') as f:
-            f.write(f"# Transcription of {file_name}\n\n{metadata}{transcription}")
+            f.write(f"# Transcription of {file_name}\n\n{metadata}{transcription}\n\nAdjusted Timestamps:\n{adjusted_timestamps}")
 
     def process_folders(self, text_box, folder_listbox):
         for folder in self.config_handler.config.get('folder_list', []):
