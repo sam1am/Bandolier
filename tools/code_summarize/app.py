@@ -5,6 +5,7 @@ from pathlib import Path
 from ItsPrompt.prompt import Prompt
 from openai import OpenAI
 from dotenv import load_dotenv
+import argparse
 
 load_dotenv()
 
@@ -22,6 +23,11 @@ IGNORE_LIST = [".git", "venv", ".summary_files"]
 # 1. Run the script
 # 2. Use arrow keys to select/deselect files, press ENTER to continue.
 # 3. The code summary will be saved in the current directory as code_summary.md
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="Generate code summaries and README.")
+    parser.add_argument("--infer", action="store_true", help="Enable OpenAI calls for summaries and readme")
+    return parser.parse_args()
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -244,35 +250,39 @@ def write_previous_selection(selected_files):
         json.dump(selected_files, f)
 
 def main():
-    create_hidden_directory() 
+    args = parse_arguments()  # Parse command-line arguments
+    create_hidden_directory()
     files = display_files()
-    filtered_files = [file for file in files if not file.startswith('./.')]  
+    filtered_files = [file for file in files if not file.startswith('./.')]
     previous_selection = read_previous_selection()
-    selected_files = select_files(filtered_files, previous_selection) 
-    write_previous_selection(selected_files)
-    create_code_summary(selected_files)
-    create_compressed_summary(selected_files)
-    print("\nCode summary successfully created in '.summary_files/code_summary.md'.")
-    print("\nCompressed code summary successfully created in '.summary_files/compressed_code_summary.md'.")
-    # Load compressed code summary
-    summary_directory = Path(".summary_files")
-    compressed_summary_file = summary_directory / "compressed_code_summary.md"
-    with open(compressed_summary_file, "r") as f:
-        compressed_summary = f.read()
+    selected_files = select_files(filtered_files, previous_selection)
+    # Use the flag to determine if OpenAI calls should be made
+    if args.infer:
+        write_previous_selection(selected_files)
+        create_code_summary(selected_files)
+        create_compressed_summary(selected_files)
+        print("\nCode summary successfully created in '.summary_files/code_summary.md'.")
+        print("\nCompressed code summary successfully created in '.summary_files/compressed_code_summary.md'.")
+        # Load compressed code summary
+        summary_directory = Path(".summary_files")
+        compressed_summary_file = summary_directory / "compressed_code_summary.md"
+        with open(compressed_summary_file, "r") as f:
+            compressed_summary = f.read()
 
-    # Generate updated README.md file using GPT-4
-    readme_content = generate_readme(compressed_summary)
+        # Generate updated README.md file using GPT-4
+        readme_content = generate_readme(compressed_summary)
 
-    # Save the updated README.md file
-    readme_file = Path("README.md")
-    # if readme_file.exists():
-        
-    with open(readme_file, "w") as f:
-        f.write(readme_content)
+        # Save the updated README.md file
+        readme_file = Path("README.md")
+        with open(readme_file, "w") as f:
+            f.write(readme_content)
 
-    print("\nUpdated README.md file successfully generated in 'README.md'.")
+        print("\nUpdated README.md file successfully generated in 'README.md'.")
+    else:
+        # If the flag is not set, skip the OpenAI calls and only create the local summary file
+        create_code_summary(selected_files)
+        print("\nLocal code summary successfully created in '.summary_files/code_summary.md'.")
 
 if __name__ == "__main__":
     main()
-
 

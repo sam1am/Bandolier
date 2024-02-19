@@ -75,7 +75,10 @@ fi
 source "$SCRIPTPATH/venv/bin/activate"
 
 # Run the app
-python "$SCRIPTPATH/app.py"
+# python "$SCRIPTPATH/app.py"
+# Run the app with all command-line arguments passed to this script
+python "$SCRIPTPATH/app.py" $@
+
 
 # Deactivate the virtual environment
 deactivate
