@@ -1,5 +1,7 @@
 import asyncio
 from brilliant_monocle_driver import Monocle
+from pynput import keyboard
+from threading import Thread
 
 def callback(channel, text_in):
     """
@@ -35,18 +37,79 @@ def prepare_display_command(text):
 
 
 
-async def execute(text):
+# async def execute(text):
+#     """
+#     Sends the given text to the display, divided into appropriate chunks.
+#     """
+#     mono = Monocle(callback)
+#     async with mono:
+#         display_commands = prepare_display_command(text)
+#         # Assuming that the `mono.send` method can execute the display.show command with the objects directly.
+#         # You might need to adjust this part based on how `mono.send` works.
+#         await mono.send(display_commands)
+
+
+async def update_display(mono, text):
     """
-    Sends the given text to the display, divided into appropriate chunks.
+    Async function to update the display with the given text.
     """
+    display_commands = prepare_display_command(text)
+    await mono.send(display_commands)
+
+def listen_for_keypress(mono, loop):
+    """
+    Listens for keypress events and updates the display accordingly.
+    """
+    text = []
+
+    def on_press(key):
+        nonlocal text
+        try:
+            char = None
+            if hasattr(key, 'char') and key.char is not None:
+                # It's a character key
+                char = key.char
+            elif key == keyboard.Key.space:
+                # Handle the space key
+                text.append(' ')
+            elif key == keyboard.Key.backspace:
+                # Handle the backspace key
+                text = text[:-1]
+                asyncio.run_coroutine_threadsafe(update_display(mono, ''.join(text)), loop)
+                return
+            elif key == keyboard.Key.enter:
+                # Handle the enter key
+                asyncio.run_coroutine_threadsafe(update_display(mono, ''.join(text)), loop)
+                text = []
+                return
+        
+            else:
+                # For simplicity, other special keys are ignored in this example
+                return
+            
+            if char:
+                text.append(char)  # Add the character to the text
+                asyncio.run_coroutine_threadsafe(update_display(mono, ''.join(text)), loop)
+        except Exception as e:
+            print(f"Error: {e}")
+
+    listener = keyboard.Listener(on_press=on_press)
+    listener.start()
+
+
+async def main():
     mono = Monocle(callback)
+    loop = asyncio.get_running_loop()
     async with mono:
-        display_commands = prepare_display_command(text)
-        # Assuming that the `mono.send` method can execute the display.show command with the objects directly.
-        # You might need to adjust this part based on how `mono.send` works.
-        await mono.send(display_commands)
+        # Initialize the display with '>' to indicate readiness
+        await update_display(mono, '>')
 
+        # Start the thread that listens for keyboard events.
+        Thread(target=listen_for_keypress, args=(mono, loop), daemon=True).start()
 
-# Example usage
-text = "Your long text message that is very long and needs to be put on multiple lines."
-asyncio.run(execute(text))
+        # Keep the application running to listen for keypresses.
+        while True:
+            await asyncio.sleep(1)
+
+# Run the application
+asyncio.run(main())
