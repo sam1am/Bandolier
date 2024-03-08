@@ -9,31 +9,32 @@ def callback(channel, text_in):
     """
     print(text_in)
 
-def prepare_display_command(text):
-    MAX_LENGTH = 288
+def prepare_display_command(lines):
     MAX_LINE_LENGTH = 26
-
-    if len(text) > MAX_LENGTH:
-        raise ValueError("Text exceeds the maximum allowed length of 288 characters.")
+    LINE_HEIGHT = 50  # Assuming a fixed line height for simplicity
 
     # Initialize the command with the import statement
     command = "import display\n\n"
 
-    lines = []
-    display_objects = []
-    for j, i in enumerate(range(0, len(text), MAX_LINE_LENGTH)):
-        line_var = f"line{j+1}"
-        line_text = text[i:i+MAX_LINE_LENGTH].replace("'", "\\'")  # Escape single quotes in text
-        line_command = f"{line_var} = display.Text('{line_text}', 0, {j*50}, 0xFFFFFF)"
-        lines.append(line_command)
-        display_objects.append(line_var)
+    display_commands = []
+    for idx, line in enumerate(lines):
+        # Split long lines into multiple displayable segments if needed
+        for i in range(0, len(line), MAX_LINE_LENGTH):
+            segment = line[i:i+MAX_LINE_LENGTH].replace("'", "\\'")  # Escape single quotes in text
+            line_var = f"line{len(display_commands)+1}"
+            line_command = f"{line_var} = display.Text('{segment}', 0, {idx * LINE_HEIGHT}, 0xFFFFFF)"
+            display_commands.append(line_command)
 
     # Add the lines to the command string
-    command += "\n".join(lines) + "\n\n"
+    command += "\n".join(display_commands) + "\n\n"
     # Add the display.show() command
-    command += f"display.show({', '.join(display_objects)})\n"
+    command += f"display.show({', '.join([cmd.split()[0] for cmd in display_commands])})\n"
 
     return command
+
+# The rest of your script remains unchanged, including the async main function and the listen_for_keypress function.
+
+
 
 
 
@@ -53,48 +54,47 @@ async def update_display(mono, text):
     """
     Async function to update the display with the given text.
     """
-    display_commands = prepare_display_command(text)
+    lines = text.split('\n')  # Split text into lines for display
+    display_commands = prepare_display_command(lines)
     await mono.send(display_commands)
+
 
 def listen_for_keypress(mono, loop):
     """
     Listens for keypress events and updates the display accordingly.
     """
-    text = []
+    lines = [""]  # Start with a single empty line
 
     def on_press(key):
-        nonlocal text
+        nonlocal lines
         try:
-            char = None
-            if hasattr(key, 'char') and key.char is not None:
-                # It's a character key
-                char = key.char
+            if hasattr(key, 'char') and key.char:
+                # It's a character key, append to the current line
+                lines[-1] += key.char
             elif key == keyboard.Key.space:
-                # Handle the space key
-                text.append(' ')
+                # Handle the space key, append space to the current line
+                lines[-1] += ' '
             elif key == keyboard.Key.backspace:
-                # Handle the backspace key
-                text = text[:-1]
-                asyncio.run_coroutine_threadsafe(update_display(mono, ''.join(text)), loop)
-                return
+                # Handle the backspace key, remove last character of the current line
+                if lines[-1]:
+                    lines[-1] = lines[-1][:-1]
+                elif len(lines) > 1:  # If the current line is empty and not the first line, remove the line
+                    lines.pop()
             elif key == keyboard.Key.enter:
-                # Handle the enter key
-                asyncio.run_coroutine_threadsafe(update_display(mono, ''.join(text)), loop)
-                text = []
-                return
-        
+                # Handle the enter key, start a new line
+                lines.append("")
             else:
-                # For simplicity, other special keys are ignored in this example
+                # Ignore other special keys
                 return
-            
-            if char:
-                text.append(char)  # Add the character to the text
-                asyncio.run_coroutine_threadsafe(update_display(mono, ''.join(text)), loop)
+
+            # Update display with the current state of lines
+            asyncio.run_coroutine_threadsafe(update_display(mono, '\n'.join(lines)), loop)
         except Exception as e:
             print(f"Error: {e}")
 
     listener = keyboard.Listener(on_press=on_press)
     listener.start()
+
 
 
 async def main():
