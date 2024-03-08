@@ -60,10 +60,10 @@ fan_speed_canvas.get_tk_widget().pack()
 
 
 def update_temperature_graph():
-    global temperature_readings, temp_ax
+    global temperature_readings, temp_ax, temp_canvas
 
-    if len(temperature_readings) > 600:  # Limit the number of readings
-        temperature_readings.pop(0)
+    # Ensure `temperature_readings` has at most 600 elements
+    temperature_readings = temperature_readings[-600:]
 
     temp_ax.clear()
     temp_ax.plot(temperature_readings, marker='o', color='b')
@@ -72,6 +72,7 @@ def update_temperature_graph():
     temp_ax.set_xlabel('Reading')
     temp_ax.grid(True)
     temp_canvas.draw()
+
 
 # Update the graph with new fan speed readings
 
