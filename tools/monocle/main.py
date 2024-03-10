@@ -75,9 +75,32 @@ async def update_display(mono, text, max_lines, title):
 def listen_for_keypress(mono, loop, max_lines, db_operation_queue, conn):
     lines = [">"]
     title = datetime.now().strftime("%Y-%m-%d %I:%M:%S %p")
+    current_note_id = None  # None indicates a new note
+
+    def fetch_note(direction):
+        nonlocal current_note_id, lines, title
+        with conn:
+            c = conn.cursor()
+            if current_note_id is None:  # Fetch the most recent note if no note is being edited
+                c.execute("SELECT id, title, content FROM notes ORDER BY id DESC LIMIT 1")
+            else:
+                if direction == 'previous':
+                    c.execute("SELECT id, title, content FROM notes WHERE id < ? ORDER BY id DESC LIMIT 1", (current_note_id,))
+                else:  # direction == 'next'
+                    c.execute("SELECT id, title, content FROM notes WHERE id > ? ORDER BY id ASC LIMIT 1", (current_note_id,))
+            note = c.fetchone()
+            if note:
+                current_note_id, title, content = note
+                lines = content.split('\n') + [""]
+            elif direction == 'previous':  # No previous note found, do nothing
+                pass
+            else:  # direction == 'next' and no next note found, create a new note
+                current_note_id = None
+                title = datetime.now().strftime("%Y-%m-%d %I:%M:%S %p")
+                lines = [">"]
 
     def on_press(key):
-        nonlocal lines, title
+        nonlocal lines, title, current_note_id
         try:
             if hasattr(key, 'char') and key.char:
                 # It's a character key, append to the current line
@@ -98,11 +121,21 @@ def listen_for_keypress(mono, loop, max_lines, db_operation_queue, conn):
                         note_content = '\n'.join(lines[:-1])  # Exclude the last empty line
                         with conn:
                             c = conn.cursor()
-                            c.execute("INSERT INTO notes (timestamp, title, content) VALUES (?, ?, ?)", (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), title, note_content))
+                            if current_note_id is None:  # If it's a new note
+                                c.execute("INSERT INTO notes (timestamp, title, content) VALUES (?, ?, ?)", (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), title, note_content))
+                            else:  # If it's an existing note being edited
+                                c.execute("UPDATE notes SET title = ?, content = ? WHERE id = ?", (title, note_content, current_note_id))
                     lines = [">"]  # Reset the lines to a new note
                     title = datetime.now().strftime("%Y-%m-%d %I:%M:%S %p")  # Update the title with the current date and time
+                    current_note_id = None  # Reset current_note_id to indicate a new note
                 else:
                     lines.append("")  # Start a new line
+            elif key == keyboard.Key.left:
+                # Handle the left arrow key, fetch the previous note
+                fetch_note('previous')
+            elif key == keyboard.Key.right:
+                # Handle the right arrow key, fetch the next note or create a new one
+                fetch_note('next')
             else:
                 # Ignore other special keys
                 return
@@ -112,8 +145,10 @@ def listen_for_keypress(mono, loop, max_lines, db_operation_queue, conn):
         except Exception as e:
             print(f"Error: {e}")
 
+
     listener = keyboard.Listener(on_press=on_press)
     listener.start()
+
 
 async def main():
     mono = Monocle(callback)
