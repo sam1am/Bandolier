@@ -2,22 +2,22 @@ import asyncio
 from brilliant_monocle_driver import Monocle
 from pynput import keyboard
 from threading import Thread
+import sqlite3
+from datetime import datetime
+import queue
 
 DISPLAY_PIXEL_HEIGHT = 400
 DISPLAY_PIXEL_WIDTH = 640
 MAX_LINE_LENGTH = 26
 LINE_HEIGHT = 50
-STATUS_LINE_HEIGHT = LINE_HEIGHT  # Height of the status line
-HORIZONTAL_LINE_Y = DISPLAY_PIXEL_HEIGHT - (STATUS_LINE_HEIGHT * 2)  # Y-coordinate for the horizontal line
-max_lines = (DISPLAY_PIXEL_HEIGHT - STATUS_LINE_HEIGHT * 2) // LINE_HEIGHT  # Adjust for status and horizontal line
+STATUS_LINE_HEIGHT = LINE_HEIGHT
+HORIZONTAL_LINE_Y = DISPLAY_PIXEL_HEIGHT - (STATUS_LINE_HEIGHT * 2)
+max_lines = (DISPLAY_PIXEL_HEIGHT - STATUS_LINE_HEIGHT * 2) // LINE_HEIGHT
 
 def callback(channel, text_in):
-    """
-    Callback to handle incoming text from the Monocle.
-    """
     print(text_in)
 
-def prepare_display_command(lines, max_lines):
+def prepare_display_command(lines, max_lines, title):
     # Initialize the command with the import statement
     command = "import display\n\n"
 
@@ -48,7 +48,7 @@ def prepare_display_command(lines, max_lines):
             display_commands.append(line_command)
 
     # Add the horizontal line and the status indicator
-    status_line = f"status_line = display.Text('Typing', 0, {DISPLAY_PIXEL_HEIGHT - STATUS_LINE_HEIGHT}, 0xFFFFFF, justify=display.BOTTOM_LEFT)"
+    status_line = f"status_line = display.Text('{title}', 0, {DISPLAY_PIXEL_HEIGHT - STATUS_LINE_HEIGHT}, 0xFFFFFF, justify=display.BOTTOM_LEFT)"
     horizontal_line = f"horizontal_line = display.HLine(0, {HORIZONTAL_LINE_Y}, {DISPLAY_PIXEL_WIDTH}, 0xFFFFFF)"
     
     # Add the lines to the command string
@@ -61,22 +61,23 @@ def prepare_display_command(lines, max_lines):
 
     return command
 
-async def update_display(mono, text, max_lines):
+async def update_display(mono, text, max_lines, title):
     """
     Async function to update the display with the given text.
     """
     lines = text.split('\n')  # Split text into lines for display
-    display_commands = prepare_display_command(lines, max_lines)
-    await mono.send(display_commands)
+    display_commands = prepare_display_command(lines, max_lines, title)
+    try:
+        await mono.send(display_commands)
+    except Exception as e:
+        print(f"Error: {e}")
 
-def listen_for_keypress(mono, loop, max_lines):
-    """
-    Listens for keypress events and updates the display accordingly.
-    """
-    lines = [""]  # Start with a single empty line
+def listen_for_keypress(mono, loop, max_lines, db_operation_queue, conn):
+    lines = [">"]
+    title = datetime.now().strftime("%Y-%m-%d %I:%M:%S %p")
 
     def on_press(key):
-        nonlocal lines
+        nonlocal lines, title
         try:
             if hasattr(key, 'char') and key.char:
                 # It's a character key, append to the current line
@@ -86,43 +87,50 @@ def listen_for_keypress(mono, loop, max_lines):
                 lines[-1] += ' '
             elif key == keyboard.Key.backspace:
                 # Handle the backspace key, remove last character of the current line
-                if lines[-1]:
+                if lines[-1] and lines[-1] != ">":
                     lines[-1] = lines[-1][:-1]
                 elif len(lines) > 1:  # If the current line is empty and not the first line, remove the line
                     lines.pop()
             elif key == keyboard.Key.enter:
-                # Handle the enter key, start a new line
-                lines.append("")
+                # Handle the enter key
+                if len(lines) > 1 and not lines[-1]:  # If two consecutive enters are pressed
+                    if lines[0] != ">":  # Check if the first line is not empty
+                        note_content = '\n'.join(lines[:-1])  # Exclude the last empty line
+                        with conn:
+                            c = conn.cursor()
+                            c.execute("INSERT INTO notes (timestamp, title, content) VALUES (?, ?, ?)", (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), title, note_content))
+                    lines = [">"]  # Reset the lines to a new note
+                    title = datetime.now().strftime("%Y-%m-%d %I:%M:%S %p")  # Update the title with the current date and time
+                else:
+                    lines.append("")  # Start a new line
             else:
                 # Ignore other special keys
                 return
 
-            # Update display with the current state of lines
-            asyncio.run_coroutine_threadsafe(update_display(mono, '\n'.join(lines), max_lines), loop)
+            # Update display with the current state of lines and title
+            asyncio.run_coroutine_threadsafe(update_display(mono, '\n'.join(lines), max_lines, title), loop)
         except Exception as e:
             print(f"Error: {e}")
 
     listener = keyboard.Listener(on_press=on_press)
     listener.start()
 
-
-
-
 async def main():
     mono = Monocle(callback)
     loop = asyncio.get_running_loop()
+
+    conn = sqlite3.connect('notes.db', check_same_thread=False)
+    conn.execute('''CREATE TABLE IF NOT EXISTS notes
+                 (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp TEXT, title TEXT, content TEXT)''')
+
     async with mono:
-        # Initialize the display with '>' to indicate readiness
-        await update_display(mono, '>', max_lines)
+        await update_display(mono, '>', max_lines, datetime.now().strftime("%Y-%m-%d %I:%M:%S %p"))
 
-        # Start the thread that listens for keyboard events.
-        # Pass max_lines to listen_for_keypress
-        Thread(target=listen_for_keypress, args=(mono, loop, max_lines), daemon=True).start()
+        Thread(target=listen_for_keypress, args=(mono, loop, max_lines, None, conn), daemon=True).start()
 
-        # Keep the application running to listen for keypresses.
         while True:
             await asyncio.sleep(1)
 
+    conn.close()
 
-# Run the application
 asyncio.run(main())
