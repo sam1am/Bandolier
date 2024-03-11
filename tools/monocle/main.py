@@ -25,6 +25,8 @@ def prepare_display_command(lines, max_lines, title):
     display_lines = lines[:max_lines]
 
     display_commands = []
+    cursor_x_position = 0
+    cursor_y_position = 0
     for idx, line in enumerate(display_lines):
         # Escape single quotes in the line
         line = line.replace("'", "\\'")
@@ -46,6 +48,14 @@ def prepare_display_command(lines, max_lines, title):
             line_var = f"line{len(display_commands)+1}"
             line_command = f"{line_var} = display.Text('{segment.strip()}', 0, {idx * LINE_HEIGHT}, 0xFFFFFF)"
             display_commands.append(line_command)
+            # Update cursor position based on the last segment
+            cursor_x_position = len(segment.strip()) * (DISPLAY_PIXEL_WIDTH // MAX_LINE_LENGTH)
+            cursor_y_position = idx * LINE_HEIGHT + LINE_HEIGHT - 5  # Adjust cursor to the bottom of the line
+
+    # Update cursor position when hitting enter
+    if lines[-1] == "_":
+        cursor_x_position = 0
+        cursor_y_position += LINE_HEIGHT
 
     # Add the horizontal line and the status indicator
     status_line = f"status_line = display.Text('{title}', 0, {DISPLAY_PIXEL_HEIGHT - STATUS_LINE_HEIGHT}, 0xFFFFFF, justify=display.BOTTOM_LEFT)"
@@ -56,10 +66,16 @@ def prepare_display_command(lines, max_lines, title):
     command += status_line + "\n"
     command += horizontal_line + "\n\n"
     
-    # Add the display.show() command with the status and horizontal line
-    command += f"display.show({', '.join([cmd.split()[0] for cmd in display_commands])}, status_line, horizontal_line)\n"
+    cursor_line = f"cursor = display.Line({cursor_x_position}, {cursor_y_position}, {cursor_x_position + 10}, {cursor_y_position}, 0xFFFF00, thickness=2)"
+    command += cursor_line + "\n\n"
+
+    # Adjust the display.show() command to include the cursor Line object
+    command += f"display.show({', '.join([cmd.split()[0] for cmd in display_commands])}, status_line, horizontal_line, cursor)\n"
 
     return command
+
+
+
 
 async def update_display(mono, text, max_lines, title):
     """
@@ -71,6 +87,7 @@ async def update_display(mono, text, max_lines, title):
         await mono.send(display_commands)
     except Exception as e:
         print(f"Error: {e}")
+
 
 def listen_for_keypress(mono, loop, max_lines, db_operation_queue, conn):
     lines = [">"]
