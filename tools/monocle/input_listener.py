@@ -2,6 +2,7 @@
 from pynput import keyboard
 from datetime import datetime
 import asyncio
+from threading import Timer
 
 class InputListener:
     def __init__(self, display_queue, note_manager, loop):
@@ -13,6 +14,8 @@ class InputListener:
         self.title = datetime.now().strftime("%Y-%m-%d %I:%M:%S %p")
         self.current_note_id = None
         self.loop = loop
+        self.debounce_timer = None
+        self.debounce_delay = 0.5  # 500 milliseconds
 
     
     def start(self):
@@ -59,3 +62,13 @@ class InputListener:
             self.display_queue.put(('\n'.join(self.lines), self.title))
         except Exception as e:
             print(f"Error in InputListener: {e}")
+
+        # Debounce logic
+        if self.debounce_timer is not None:
+            self.debounce_timer.cancel()
+        self.debounce_timer = Timer(self.debounce_delay, self._update_display)
+        self.debounce_timer.start()
+
+    def _update_display(self):
+        self.display_queue.put(('\n'.join(self.lines), self.title))
+
