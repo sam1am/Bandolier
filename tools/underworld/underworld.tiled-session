@@ -1,0 +1,46 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+        "venv"
+    ],
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "#maptiles": {
+            "scaleInDock": 1.2079
+        },
+        "/Users/johngarfield/Downloads/Forest BETA V3/Forest Props.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/Users/johngarfield/Downloads/Forest BETA V3/Forest Tilesett.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "/Users/johngarfield/Downloads/Forest BETA V3",
+    "map.height": 30,
+    "map.renderOrder": "2",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 40,
+    "openFiles": [
+        "/Users/johngarfield/Downloads/Forest BETA V3/Forest Tilesett.tsx",
+        "/Users/johngarfield/Downloads/Forest BETA V3/Forest Props.tsx"
+    ],
+    "project": "",
+    "recentFiles": [
+        "/Users/johngarfield/Downloads/Forest BETA V3/Forest Props.tsx",
+        "/Users/johngarfield/Downloads/Forest BETA V3/Forest Tilesett.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}
