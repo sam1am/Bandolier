@@ -1,7 +1,7 @@
 # gpt4_vision_api.py
 # You'll need to substitute API_ENDPOINT and API_KEY with the actual values provided by the GPT-4 vision API
 API_ENDPOINT = 'https://api.openai.com/v1/images'
-API_KEY = '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'
+API_KEY = 'sk-xxxxx'
 
 import requests
 
