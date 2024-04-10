@@ -1,0 +1,7 @@
+langchain
+openai
+scikit-learn
+python-dotenv
+tiktoken
+matplotlib
+pypdf
