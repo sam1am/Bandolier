@@ -1,11 +1,15 @@
-import tkinter as tk
-from tkinter import ttk
+# import tkinter as tk
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 import subprocess
 import re
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkinter.simpledialog import askstring
 import sys
+
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 
 # The lists to store temperature and fan speed readings
 temperature_readings = []
@@ -53,18 +57,18 @@ def apply_tdp_settings():
         print(f"Error applying TDP settings: {e}")
 
 # Create the main window
-root = tk.Tk()
-root.title("System Monitor")
+root = ttk.Window(themename="darkly")
+root.title("Ryzen Master and Commander")
 
 # Create a main frame with a scrollbar
 main_frame = ttk.Frame(root)
-main_frame.pack(fill=tk.BOTH, expand=True)
+main_frame.pack(fill=ttk.BOTH, expand=True)
 
-canvas = tk.Canvas(main_frame)
-canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+canvas = ttk.Canvas(main_frame)
+canvas.pack(side=ttk.LEFT, fill=ttk.BOTH, expand=True)
 
-scrollbar = ttk.Scrollbar(main_frame, orient=tk.VERTICAL, command=canvas.yview)
-scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+scrollbar = ttk.Scrollbar(main_frame, orient=ttk.VERTICAL, command=canvas.yview)
+scrollbar.pack(side=ttk.RIGHT, fill=ttk.Y)
 
 canvas.configure(yscrollcommand=scrollbar.set)
 canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('all')))
