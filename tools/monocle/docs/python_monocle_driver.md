@@ -1,0 +1,93 @@
+# Brilliant Monocle Driver
+
+`brilliant-monocle-driver` is a simple Python library that uses
+[Bleak](https://github.com/hbldh/bleak) to connect to and control a [Brilliant Labs Monocle](https://www.brilliantmonocle.com/) display device.
+
+# Install
+
+`pip install brilliant-monocle-driver`
+
+
+# Usage examples
+
+## Display battery and then blank screen
+
+``` Python
+import asyncio
+from brilliant_monocle_driver import Monocle
+
+def callback(channel, text_in):
+  """
+  Callback to handle incoming text from the Monocle.
+  """
+  print(text_in)
+
+# Simple MicroPython command that prints battery level for five seconds
+# and then blanks the screen
+COMMAND = """
+import display
+import device
+import time
+
+def show_battery(count):
+    batLvl = str(device.battery_level())
+    fill = display.Fill(display.BLUE)
+    text = display.Text("bat: {} {}".format(batLvl, count), 5, 5, display.WHITE)
+    display.show(fill, text)
+
+count = 0
+while count < 5:
+    show_battery(count)
+    time.sleep(1)
+    count += 1
+
+fill = display.Fill(display.CLEAR)
+display.show(fill)
+
+print("Done")
+
+
+"""
+
+async def execute():
+    mono = Monocle(callback)
+    async with mono:
+        await mono.send(COMMAND)
+
+asyncio.run(execute())
+
+```
+
+## Receive touch events
+
+```Python
+import asyncio
+from brilliant_monocle_driver import Monocle
+
+def a_touch():
+    print("A touch!")
+
+def b_touch():
+    print("B touch!")
+
+async def execute():
+    mono = Monocle()
+    async with mono:
+        await mono.install_touch_events()
+        mono.set_a_touch_callback(a_touch)
+        mono.set_b_touch_callback(b_touch)
+        await asyncio.sleep(30000)
+
+asyncio.run(execute())
+```
+
+# Details
+
+`brilliant-monocle-driver` attaches to a Monocle via the UART characteristics exposed over
+BLE in Monocle's default firmware, as specified in the
+[Monocle documentation](https://docs.brilliantmonocle.com/micropython/micropython/#under-the-hood). Once
+connection is established, commands can be sent directly to the Monocle as
+MicroPython. The driver avoids MTU overflow and does some convenience /
+correction massaging (sending `Ctrl-C` to stop any running command and wrapping
+the incoming command in `Ctrl-A | Ctrl-D` to avoid interference from the REPL's
+echo and auto-formatting convenience behaviors).
