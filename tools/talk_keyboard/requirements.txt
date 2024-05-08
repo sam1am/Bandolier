@@ -1,0 +1,7 @@
+openai
+pyautogui
+pynput
+sounddevice
+scipy
+git+https://github.com/m-bain/whisperx.git
+av==9.2.0
