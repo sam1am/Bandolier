@@ -16,7 +16,7 @@ async def run_prompt(module_files):
 async def execute(mono):
     while True:
         # Clear the display
-        os.system('clear' if os.name == 'posix' else 'cls')
+        # os.system('clear' if os.name == 'posix' else 'cls')
 
         # Look for .py files in the ./modules folder
         module_files = [file for file in os.listdir("./modules") if file.endswith(".py")]
