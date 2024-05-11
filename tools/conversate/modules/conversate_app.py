@@ -1,17 +1,18 @@
+import os
+from dotenv import load_dotenv
+import time
+import uuid
+
 import pygame
 import pygame.mixer as mixer
 import sounddevice as sd
 import numpy as np
 import scipy.io.wavfile as wavfile
+
 from .llm_api import process_query
 from .tts_api import convert_to_speech
 from .stt_api import convert_audio_to_text
 from .database import log_interaction, get_last_messages
-import os
-from dotenv import load_dotenv
-import soundfile as sf
-import time
-import uuid
 
 load_dotenv()
 
@@ -122,19 +123,15 @@ class ConversateApp:
         total_time = time.time() - start_time
         print(f"Turn completed in {total_time} seconds")
 
-        # Play the audio file using sounddevice
-        data, sample_rate = sf.read(response_audio_file)
-        # sd.default.latency = 'low'  # Adjust latency if needed
-        # sd.default.blocksize = 4096  # Adjust block size if needed
+        # Load the audio file using Pygame mixer
         sound = mixer.Sound(response_audio_file)
-        sound.play()
 
-        # Wait for the audio to finish  
+        # Play the audio
+        channel = sound.play()
+
+        # Wait for the playback to finish
         while mixer.get_busy():
             pygame.time.delay(100)
-
-        # sd.play(data, sample_rate, device=self.input_device)
-        # sd.wait()
 
         # Log the interaction to the database
         log_interaction(query_uuid, query_audio_file, query_text, response_text, response_audio_file)
