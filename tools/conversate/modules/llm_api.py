@@ -1,12 +1,12 @@
-# from openai import OpenAI
-from groq import Groq
+from openai import OpenAI
+# from groq import Groq
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# client = OpenAI(base_url=os.getenv("LLM_API_URL"), api_key=os.getenv("LLM_API_KEY"))
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+client = OpenAI(base_url=os.getenv("LLM_API_URL"), api_key=os.getenv("LLM_API_KEY"))
+# client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def process_query(query, message_history):
     messages = [

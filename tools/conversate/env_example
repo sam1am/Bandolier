@@ -6,12 +6,16 @@ LLM_API_URL=http://localhost:1234/v1
 LLM_API_KEY=lm-studio
 LLM_MODEL=lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF
 
+GROQ_API_KEY=
+
 TTS_API_URL=http://127.0.0.1:7860
 TTS_VOICE=max1
 TTS_LANG=English #language/accent
+TTS_SPEED=0.55
 
 STT_MODEL=tiny #tiny, base, large-v2, etc.
 STT_DEVICE=cpu #cpu, cuda
 STT_COMPUTE_TYPE=int8 # int8 or float16
 STT_LANG=en #language code
+
 
