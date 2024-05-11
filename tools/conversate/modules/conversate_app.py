@@ -2,10 +2,14 @@ import pygame
 import sounddevice as sd
 import numpy as np
 import scipy.io.wavfile as wavfile
-from llm_api import process_query
-from tts_api import convert_to_speech
-from whisperx_api import convert_audio_to_text
-from database import log_interaction
+from .llm_api import process_query
+from .tts_api import convert_to_speech
+from .whisperx_api import convert_audio_to_text
+from .database import log_interaction
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class ConversateApp:
     def __init__(self, screen):
@@ -18,16 +22,17 @@ class ConversateApp:
         self.speaking_color = (0, 255, 0)
 
         # Set up the audio recording parameters
-        self.sample_rate = 48000
+        self.sample_rate = int(os.getenv("SAMPLE_RATE", 48000))
         self.channels = 1
         self.duration = 5  # Recording duration in seconds
 
-        self.input_device = 15
+        self.input_device = int(os.getenv("SOUND_DEVICE", 1))
         
 
     def run(self):
         running = True
         while running:
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -52,6 +57,7 @@ class ConversateApp:
                         if query == "":
                             query = "Howdy"
                         
+                        print(f"Query: {query}")
                         # Process the query using llm_api
                         response_text = process_query(query)
 

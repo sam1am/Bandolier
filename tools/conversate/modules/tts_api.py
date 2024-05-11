@@ -1,13 +1,17 @@
 import gradio_client
+import os
+from dotenv import load_dotenv
 
-tts_client = gradio_client.Client("http://localhost:7861/")
+load_dotenv()
+
+tts_client = gradio_client.Client(os.getenv("TTS_API_URL"))
 
 def convert_to_speech(text):
     tts_result = tts_client.predict(
         text,
-        "Rogger",  # Selected speaker
+        os.getenv("TTS_VOICE"),
         0.8,  # Speed
-        "English",  # Language/Accent
+        os.getenv("TTS_LANG"),
         api_name="/gen_voice"
     )
     
@@ -15,6 +19,6 @@ def convert_to_speech(text):
     with open(tts_result, "rb") as f:
         audio_data = f.read()
     
-    with open("response.wav", "wb") as f:
+    with open("./workspace/response.wav", "wb") as f:
         f.write(audio_data)
     # Implement logic to play the response audio

@@ -1,5 +1,5 @@
 import pygame
-from conversate_app import ConversateApp
+from modules.conversate_app import ConversateApp
 
 def main():
     # Initialize Pygame

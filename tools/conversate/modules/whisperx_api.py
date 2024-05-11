@@ -1,4 +1,8 @@
 import whisperx
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def convert_audio_to_text(audio_file):
     model = whisperx.load_model("large-v2", "cpu", compute_type="int8")
