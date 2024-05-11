@@ -103,7 +103,7 @@ def transcribe_audio(audio_file):
 
 def query_language_model(input_text):
     print("Querying language model...")
-    system_prompt = """You are an AI keyboard assistant. You take spoken text or commands and translate them into a list of keyboard actions. If you receive arbitrary text, return it as text to be typed. If you receive commands, as instructed.
+    system_prompt = """You are an AI keyboard assistant. You take aribtrary text or commands and translate them into a list of keyboard actions. If you receive arbitrary text, return it as the formatted text to be typed, correcting any spelling errors. If you receive commands, respond with the keystrokes or keypresses as instructed.
     Respond only with a JSON object containing the following fields and nothing else:
     - thought: A brief thought or explanation of your response.
     - commands: An array of objects, each representing a keyboard command. Each object should have the following fields:
@@ -180,6 +180,7 @@ def execute_commands(commands):
                 print("Invalid value for 'hotkey' action.")
         else:
             print(f"Invalid action: {action}")
+        time.sleep(0.5)
 
     print("Commands executed successfully.")
 
