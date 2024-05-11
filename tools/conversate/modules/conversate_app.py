@@ -25,11 +25,13 @@ class ConversateApp:
         self.speaking_color = (0, 255, 0)
 
         # Set up the audio recording parameters
-        self.sample_rate = int(os.getenv("SAMPLE_RATE", 48000))
+        self.sample_rate = None
         self.channels = 1
         self.duration = 5  # Recording duration in seconds
 
-        self.input_device = int(os.getenv("SOUND_INPUT_DEVICE", 22))
+        # self.input_device = int(os.getenv("SOUND_INPUT_DEVICE", 22))
+        self.input_device = None
+        self.output_device = None
         
         self.typing_mode = False
         self.input_text = ""
@@ -103,6 +105,7 @@ class ConversateApp:
         inference_start_time = time.time()
         response_text = process_query(query_text, message_history)
         inference_time = time.time() - inference_start_time
+        print(f"Response: {response_text}")
         print(f"Inference ... {inference_time} seconds")
         
         # Convert the response to speech using tts_api
@@ -118,6 +121,9 @@ class ConversateApp:
 
         # Play the audio file using sounddevice
         data, sample_rate = sf.read(response_audio_file)
+        sd.default.latency = 'low'  # Adjust latency if needed
+        sd.default.blocksize = 4096  # Adjust block size if needed
+
         sd.play(data, sample_rate, device=self.input_device)
         sd.wait()
 

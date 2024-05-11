@@ -8,7 +8,7 @@ client = OpenAI(base_url=os.getenv("LLM_API_URL"), api_key=os.getenv("LLM_API_KE
 
 def process_query(query, message_history):
     messages = [
-        {"role": "system", "content": "You are a helpful assistant named Billy Bob."}
+        {"role": "system", "content": "You are a terse but helpful assistant with an attitude named Dotty. Keep your answers as short and direct as possible."}
     ]
     
     for query_text, response_text in message_history:
