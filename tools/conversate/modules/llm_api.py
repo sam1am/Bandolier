@@ -1,16 +1,30 @@
 from openai import OpenAI
-# from groq import Groq
 import os
 from dotenv import load_dotenv
+import yaml
 
 load_dotenv()
 
 client = OpenAI(base_url=os.getenv("LLM_API_URL"), api_key=os.getenv("LLM_API_KEY"))
-# client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+
+def load_file_contents(file_path):
+    with open(file_path, "r") as file:
+        return file.read()
 
 def process_query(query, message_history):
+    default_prompt = load_file_contents("./prompts/default.md")
+    penny_yaml = load_file_contents("./prompts/penny.yaml")
+    user_yaml = load_file_contents("./prompts/user.yaml")
+    response_yaml = load_file_contents("./prompts/response.yaml")
+
+    system_prompt = default_prompt.format(
+        penny_yaml=penny_yaml,
+        user_yaml=user_yaml,
+        response_yaml=response_yaml
+    )
+
     messages = [
-        {"role": "system", "content": "You are a helpful named Wilford. Do your best to help your user, Sam, and answer his queries."}
+        {"role": "system", "content": system_prompt}
     ]
     
     for query_text, response_text in message_history:

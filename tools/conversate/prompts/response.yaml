@@ -1,0 +1,4 @@
+thought: I will think about the query and work through any necessary logic.
+full_answer: I will provide the full answer.
+short_answer: I will provide a short and direct answer.
+action: If an action is called for, I will call for it to be executed. When the response is ready, I will receive an alert message and can follow-up with my partner.
