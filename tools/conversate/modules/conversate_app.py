@@ -2,12 +2,16 @@ import os
 from dotenv import load_dotenv
 import time
 import uuid
+import io
+
 
 import pygame
 import pygame.mixer as mixer
 import sounddevice as sd
+import soundfile as sf
 import numpy as np
 import scipy.io.wavfile as wavfile
+from threading import Thread
 
 from .llm_api import process_query
 from .tts_api import convert_to_speech
@@ -31,7 +35,7 @@ class ConversateApp:
         # Set up the audio recording parameters
         self.sample_rate = 48000
         self.channels = 1
-        self.duration = 5  # Recording duration in seconds
+        self.duration = 5  # recording duration in secondsr
 
         # self.input_device = int(os.getenv("SOUND_INPUT_DEVICE", 22))
         self.input_device = None
@@ -116,9 +120,12 @@ class ConversateApp:
         pygame.draw.circle(self.screen, self.speaking_color, (self.screen_width // 2, self.screen_height // 2), 100)
         pygame.display.flip()
         tts_start_time = time.time()
-        response_audio_file = convert_to_speech(response_text, query_uuid)
+        response_audio_file = f"./workspace/responses/{query_uuid}.wav"
+        concatenated_audio, sample_rate = convert_to_speech(response_text, query_uuid, self.speak_audio)
+        sf.write(response_audio_file, concatenated_audio, sample_rate)
         tts_time = time.time() - tts_start_time
         print(f"TTS ... {tts_time} seconds")
+
 
         total_time = time.time() - start_time
         print(f"Turn completed in {total_time} seconds")
@@ -135,3 +142,21 @@ class ConversateApp:
 
         # Log the interaction to the database
         log_interaction(query_uuid, query_audio_file, query_text, response_text, response_audio_file)
+
+
+    def speak_audio(self, audio_data, sample_rate):
+        # Create a BytesIO object from the audio data
+        audio_bytes = io.BytesIO()
+        sf.write(audio_bytes, audio_data, sample_rate, format='wav')
+        audio_bytes.seek(0)
+
+        # Load the audio data using Pygame mixer
+        sound = mixer.Sound(audio_bytes)
+
+        # Play the audio
+        channel = sound.play()
+
+        # Wait for the playback to finish
+        while mixer.get_busy():
+            pygame.time.delay(100)
+

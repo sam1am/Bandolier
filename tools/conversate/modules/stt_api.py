@@ -2,6 +2,7 @@ import whisperx
 import os
 from dotenv import load_dotenv
 import uuid
+import numpy as np
 
 load_dotenv()
 
