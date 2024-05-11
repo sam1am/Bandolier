@@ -36,7 +36,7 @@ def process_query(query, message_history):
     completion = client.chat.completions.create(
         model=os.getenv("LLM_MODEL"),
         messages=messages,
-        temperature=0.7,
+        temperature=os.getenv("LLM_TEMP")
     )
     response_text = completion.choices[0].message
     
