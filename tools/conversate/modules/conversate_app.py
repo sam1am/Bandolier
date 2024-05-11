@@ -1,4 +1,5 @@
 import pygame
+import pygame.mixer as mixer
 import sounddevice as sd
 import numpy as np
 import scipy.io.wavfile as wavfile
@@ -14,6 +15,8 @@ import uuid
 
 load_dotenv()
 
+mixer.init()
+
 class ConversateApp:
     def __init__(self, screen):
         self.screen = screen
@@ -25,7 +28,7 @@ class ConversateApp:
         self.speaking_color = (0, 255, 0)
 
         # Set up the audio recording parameters
-        self.sample_rate = None
+        self.sample_rate = 48000
         self.channels = 1
         self.duration = 5  # Recording duration in seconds
 
@@ -121,11 +124,17 @@ class ConversateApp:
 
         # Play the audio file using sounddevice
         data, sample_rate = sf.read(response_audio_file)
-        sd.default.latency = 'low'  # Adjust latency if needed
-        sd.default.blocksize = 4096  # Adjust block size if needed
+        # sd.default.latency = 'low'  # Adjust latency if needed
+        # sd.default.blocksize = 4096  # Adjust block size if needed
+        sound = mixer.Sound(response_audio_file)
+        sound.play()
 
-        sd.play(data, sample_rate, device=self.input_device)
-        sd.wait()
+        # Wait for the audio to finish  
+        while mixer.get_busy():
+            pygame.time.delay(100)
+
+        # sd.play(data, sample_rate, device=self.input_device)
+        # sd.wait()
 
         # Log the interaction to the database
         log_interaction(query_uuid, query_audio_file, query_text, response_text, response_audio_file)

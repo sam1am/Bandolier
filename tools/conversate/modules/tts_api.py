@@ -10,7 +10,7 @@ def convert_to_speech(text, query_uuid):
     tts_result = tts_client.predict(
         text,
         os.getenv("TTS_VOICE"),
-        0.8,  # Speed
+        float(os.getenv("TTS_SPEED")),
         os.getenv("TTS_LANG"),
         api_name="/gen_voice"
     )
