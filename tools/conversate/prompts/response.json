@@ -1,0 +1,23 @@
+{
+    "type": "object",
+    "properties": {
+        "internal_thought": {
+            "type": "string",
+            "description": "I will think about the query and work through any necessary logic."
+        },
+        "short_answer": {
+            "type": "string",
+            "description": "I will provide a short and direct answer to be communicated back to the conversation."
+        },
+        "action": {
+            "type": "string",
+            "description": "If an action is called for, I will call for it to be executed. When the response is ready, I will receive an alert message and can follow-up with my partner."
+        }
+    },
+    "required": [
+        "thought",
+        "full_answer",
+        "short_answer",
+        "action"
+    ]
+}
