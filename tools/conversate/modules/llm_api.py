@@ -1,5 +1,6 @@
 # from openai import OpenAI
 from groq import Groq
+import anthropic
 import os
 from dotenv import load_dotenv
 import json
@@ -8,10 +9,13 @@ import json
 load_dotenv()
 
 # client = OpenAI(base_url=os.getenv("LLM_API_URL"), api_key=os.getenv("LLM_API_KEY"))
-client = Groq(
-    api_key=os.getenv("GROQ_API_KEY")
+# client = Groq(
+#     api_key=os.getenv("GROQ_API_KEY")
+# )
+client = anthropic.Client(
+    # defaults to os.environ.get("ANTHROPIC_API_KEY")
+    api_key=os.getenv("ANTHROPIC_API_KEY"),
 )
-
 
 def load_file_contents(file_path):
     with open(file_path, "r") as file:
@@ -29,28 +33,42 @@ def process_query(query, message_history):
         response_json=response_json
     )
 
-    messages = [
-        {"role": "system", "content": system_prompt}
-    ]
+    # messages = [
+    #     {"role": "system", "content": system_prompt}
+    # ]
     
+    messages = []
+
     for query_text, response_text in message_history:
-        messages.append({"role": "user", "content": query_text})
-        messages.append({"role": "assistant", "content": response_text})
+        if query_text.strip():
+            messages.append({"role": "user", "content": query_text})
+            print(f"Query: {query_text}")
+        if response_text.strip():
+            messages.append({"role": "assistant", "content": response_text})
+            print(f"Response: {response_text}")
     
-    messages.append({"role": "user", "content": query})
+    if query.strip():
+        messages.append({"role": "user", "content": query})
+        # print(f"\n\nQuery:\n\n{query}\n\n")
+    # messages.append({"role": "user", "content": query})
     
-    completion = client.chat.completions.create(
+    # completion = client.chat.completions.create( # groq/openai
+    completion = client.messages.create(
         # model=os.getenv("LLM_MODEL"),
-        model=os.getenv("GROQ_MODEL"),
+        # model=os.getenv("GROQ_MODEL"),
+        model=os.getenv("ANTHROPIC_MODEL"),
+        system=system_prompt,        
         messages=messages,
-        temperature=float(os.getenv("LLM_TEMP")),
+        # temperature=float(os.getenv("LLM_TEMP")),
         max_tokens=1000,
-        response_format={"type": "json_object"}, #experimental
+        # response_format={"type": "json_object"}, #experimental
     )
-    response_text = completion.choices[0].message
+    # response_text = completion.choices[0].message
+    # print(completion.content)
+    response_content = completion.content
 
     # Extract the text content from the response
-    if hasattr(response_text, "content"):
+    if hasattr(response_text, "text"):
         response_content = response_text.content
     else:
         response_content = str(response_text)
