@@ -3,7 +3,7 @@
     "properties": {
         "internal_thought": {
             "type": "string",
-            "description": "I will think about the query and work through any necessary logic."
+            "description": "I will think internally to myself about the query and work through any necessary logic."
         },
         "short_answer": {
             "type": "string",
@@ -15,8 +15,7 @@
         }
     },
     "required": [
-        "thought",
-        "full_answer",
+        "internal_thought",
         "short_answer",
         "action"
     ]

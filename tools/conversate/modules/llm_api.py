@@ -3,7 +3,7 @@ from groq import Groq
 import os
 from dotenv import load_dotenv
 import json
-import re
+# import re
 
 load_dotenv()
 
@@ -43,7 +43,9 @@ def process_query(query, message_history):
         # model=os.getenv("LLM_MODEL"),
         model=os.getenv("GROQ_MODEL"),
         messages=messages,
-        temperature=float(os.getenv("LLM_TEMP"))
+        temperature=float(os.getenv("LLM_TEMP")),
+        max_tokens=1000,
+        response_format={"type": "json_object"}, #experimental
     )
     response_text = completion.choices[0].message
 
@@ -54,18 +56,5 @@ def process_query(query, message_history):
         response_content = str(response_text)
 
     print(f"\n\nResponse:\n\n{response_content}\n\n")
-
-    # Extract the JSON object from the response using regular expressions
-    json_match = re.search(r"\{.*\}", response_content, re.DOTALL)
-    if json_match:
-        json_string = json_match.group()
-        try:
-            response_json = json.loads(json_string)
-            if "short_answer" in response_json:
-                response_content = response_json["short_answer"]
-            else:
-                print("'short_answer' key not found in the JSON response. Falling back to full answer!")
-        except json.JSONDecodeError:
-            print("Invalid JSON format. Falling back to full answer!")
-    
+            
     return response_content
