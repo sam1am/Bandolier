@@ -2,7 +2,8 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 import requests
 import base64
 import json
-from langchain.llms import Ollama
+from langchain_community.llms import Ollama
+import os
 
 # requires ollama server
 
@@ -24,10 +25,6 @@ async def concatenate_results(response: requests.Response) -> (str, bool):
     return full_response, done
 
 def send_request_to_external_api(encoded_image: str, prompt: str) -> requests.Response:
-    """
-    Sends a POST request to the external API with the encoded image
-    and a hardcoded prompt, and returns the response object.
-    """
     payload = {
         "model": "llava",
         "prompt": prompt,
@@ -37,11 +34,8 @@ def send_request_to_external_api(encoded_image: str, prompt: str) -> requests.Re
     headers = {'Content-Type': 'application/json'}
     return requests.post("http://localhost:11434/api/generate", headers=headers, json=payload)
 
-@app.post("/analyze_image/")
+@app.post("/behold/")
 async def analyze_image(file: UploadFile = File(...), prompt: str = 'What is in this picture?'):
-    """
-    FastAPI endpoint to analyze an image by sending it to an external API.
-    """
     image_content = await file.read()
     encoded_image = base64.b64encode(image_content).decode('utf-8')
 
@@ -52,3 +46,18 @@ async def analyze_image(file: UploadFile = File(...), prompt: str = 'What is in 
         return {"response": full_response, "done": done}
     else:
         raise HTTPException(status_code=response.status_code, detail=response.text)
+
+@app.post("/infer/")
+async def infer(prompt: str, model: str = 'mistral'):
+    llm=Ollama(model=model)
+    try:
+        inference = llm(prompt)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    return {"response": inference}
+
+@app.get("/models/")
+def get_models():
+    # get models from shell using `ollama list`
+    models = os.popen("ollama list").read()
+    return {"models": models}

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # main.py
 import asyncio
 from threading import Thread
@@ -48,3 +49,47 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+=======
+import asyncio
+from brilliant_monocle_driver import Monocle
+
+def callback(channel, text_in):
+  """
+  Callback to handle incoming text from the Monocle.
+  """
+  print(text_in)
+
+# Simple MicroPython command that prints battery level for five seconds
+# and then blanks the screen
+COMMAND = """
+import display
+import device
+import time
+from brilliant_monocle_driver import Monocle
+
+def show_battery(count):
+  batLvl = str(device.battery_level())
+  display.fill(0x000066)
+  display.text("bat: {} {}".format(batLvl, count), 5, 5, 0xffffff)
+  display.show()
+
+count = 0
+while (count < 5):
+  show_battery(count)
+  time.sleep(1)
+  count += 1
+
+display.fill(0x000000)
+display.show()
+
+print("Done")
+
+"""
+
+async def execute():
+    mono = Monocle(callback)
+    async with mono:
+        await mono.send(COMMAND)
+
+asyncio.run(execute())
+>>>>>>> 31f8d55 (feat(beholder) add image analysis capability)
