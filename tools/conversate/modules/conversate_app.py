@@ -4,7 +4,7 @@ import numpy as np
 import scipy.io.wavfile as wavfile
 from .llm_api import process_query
 from .tts_api import convert_to_speech
-from .whisperx_api import convert_audio_to_text
+from .stt_api import convert_audio_to_text
 from .database import log_interaction
 import os
 from dotenv import load_dotenv
@@ -27,6 +27,9 @@ class ConversateApp:
         self.duration = 5  # Recording duration in seconds
 
         self.input_device = int(os.getenv("SOUND_DEVICE", 22))
+        # set to default device
+        
+
         
 
     def run(self):
@@ -50,6 +53,7 @@ class ConversateApp:
                         wavfile.write(audio_file, self.sample_rate, recording)
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_SPACE:
+
                         # Convert audio to text using whisperx
                         pygame.draw.circle(self.screen, self.thinking_color, (self.screen_width // 2, self.screen_height // 2), 100)
                         pygame.display.flip()
@@ -58,14 +62,20 @@ class ConversateApp:
                             query = "Howdy"
                         
                         print(f"Query: {query}")
+
                         # Process the query using llm_api
                         response_text = process_query(query)
+                        
 
                         # Extract the text content from the response
                         if isinstance(response_text, dict) and "content" in response_text:
                             response_content = response_text["content"]
                         else:
                             response_content = str(response_text)
+
+                        
+
+                        
 
                         # Convert the response to speech using tts_api
                         pygame.draw.circle(self.screen, self.speaking_color, (self.screen_width // 2, self.screen_height // 2), 100)
