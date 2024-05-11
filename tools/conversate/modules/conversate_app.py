@@ -130,15 +130,15 @@ class ConversateApp:
         total_time = time.time() - start_time
         print(f"Turn completed in {total_time} seconds")
 
-        # Load the audio file using Pygame mixer
-        sound = mixer.Sound(response_audio_file)
+        # # Load the audio file using Pygame mixer
+        # sound = mixer.Sound(response_audio_file)
 
-        # Play the audio
-        channel = sound.play()
+        # # Play the audio
+        # channel = sound.play()
 
-        # Wait for the playback to finish
-        while mixer.get_busy():
-            pygame.time.delay(100)
+        # # Wait for the playback to finish
+        # while mixer.get_busy():
+        #     pygame.time.delay(100)
 
         # Log the interaction to the database
         log_interaction(query_uuid, query_audio_file, query_text, response_text, response_audio_file)
