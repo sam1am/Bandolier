@@ -8,6 +8,7 @@ from .stt_api import convert_audio_to_text
 from .database import log_interaction
 import os
 from dotenv import load_dotenv
+import soundfile as sf
 
 load_dotenv()
 
@@ -29,9 +30,6 @@ class ConversateApp:
         self.input_device = int(os.getenv("SOUND_DEVICE", 22))
         # set to default device
         
-
-        
-
     def run(self):
         running = True
         while running:
@@ -54,7 +52,7 @@ class ConversateApp:
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_SPACE:
 
-                        # Convert audio to text using whisperx
+                        # Convert audio to text using stt_api
                         pygame.draw.circle(self.screen, self.thinking_color, (self.screen_width // 2, self.screen_height // 2), 100)
                         pygame.display.flip()
                         query = convert_audio_to_text(audio_file)
@@ -73,14 +71,15 @@ class ConversateApp:
                         else:
                             response_content = str(response_text)
 
-                        
-
-                        
-
                         # Convert the response to speech using tts_api
                         pygame.draw.circle(self.screen, self.speaking_color, (self.screen_width // 2, self.screen_height // 2), 100)
                         pygame.display.flip()
-                        convert_to_speech(response_content)
+                        audio_file = convert_to_speech(response_content)
+
+                        # Play the audio file using sounddevice
+                        data, sample_rate = sf.read(audio_file)
+                        sd.play(data, sample_rate, device=self.input_device)
+                        sd.wait()
 
                         # Log the interaction to the database
                         log_interaction(query, response_content)

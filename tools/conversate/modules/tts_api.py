@@ -19,6 +19,8 @@ def convert_to_speech(text):
     with open(tts_result, "rb") as f:
         audio_data = f.read()
     
-    with open("./workspace/response.wav", "wb") as f:
+    audio_file = "./workspace/response.wav"
+    with open(audio_file, "wb") as f:
         f.write(audio_data)
-    # Implement logic to play the response audio
+    
+    return audio_file
