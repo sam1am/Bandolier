@@ -10,6 +10,7 @@ import os
 from dotenv import load_dotenv
 import soundfile as sf
 import time
+import uuid
 
 load_dotenv()
 
@@ -42,13 +43,14 @@ class ConversateApp:
                         # Start recording
                         pygame.draw.circle(self.screen, self.listening_color, (self.screen_width // 2, self.screen_height // 2), 100)
                         pygame.display.flip()
-                        audio_file = "query.wav"
+                        query_uuid = str(uuid.uuid4())
+                        query_audio_file = f"./workspace/queries/{query_uuid}.wav"
                         
                         recording = sd.rec(int(self.duration * self.sample_rate), samplerate=self.sample_rate, channels=self.channels, device=self.input_device)
                         sd.wait()
 
                         # Save the recorded audio as a WAV file
-                        wavfile.write(audio_file, self.sample_rate, recording)
+                        wavfile.write(query_audio_file, self.sample_rate, recording)
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_SPACE:
                         start_time = time.time()
@@ -57,17 +59,17 @@ class ConversateApp:
                         pygame.draw.circle(self.screen, self.thinking_color, (self.screen_width // 2, self.screen_height // 2), 100)
                         pygame.display.flip()
                         stt_start_time = time.time()
-                        query = convert_audio_to_text(audio_file)
+                        query_text = convert_audio_to_text(query_audio_file)
                         stt_time = time.time() - stt_start_time
                         print(f"STT ... {stt_time} seconds")
-                        if query == "":
-                            query = "Howdy"
+                        if query_text == "":
+                            query_text = "Howdy"
                         
-                        print(f"Query: {query}")
+                        print(f"Query: {query_text}")
 
                         # Process the query using llm_api
                         inference_start_time = time.time()
-                        response_text = process_query(query)
+                        response_text = process_query(query_text)
                         inference_time = time.time() - inference_start_time
                         print(f"Inference ... {inference_time} seconds")
                         
@@ -75,7 +77,7 @@ class ConversateApp:
                         pygame.draw.circle(self.screen, self.speaking_color, (self.screen_width // 2, self.screen_height // 2), 100)
                         pygame.display.flip()
                         tts_start_time = time.time()
-                        audio_file = convert_to_speech(response_text)
+                        response_audio_file = convert_to_speech(response_text, query_uuid)
                         tts_time = time.time() - tts_start_time
                         print(f"TTS ... {tts_time} seconds")
 
@@ -83,14 +85,12 @@ class ConversateApp:
                         print(f"Turn completed in {total_time} seconds")
 
                         # Play the audio file using sounddevice
-                        data, sample_rate = sf.read(audio_file)
+                        data, sample_rate = sf.read(response_audio_file)
                         sd.play(data, sample_rate, device=self.input_device)
                         sd.wait()
 
-                        
-
                         # Log the interaction to the database
-                        log_interaction(query, response_text)
+                        log_interaction(query_uuid, query_audio_file, query_text, response_text, response_audio_file)
             
             # Draw the idle circle
             self.screen.fill(self.background_color)

@@ -1,8 +1,7 @@
 # conversate 
 workspace/*
-query.wav
-response.wav
-history.db
+.summary_files/*
+*.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
