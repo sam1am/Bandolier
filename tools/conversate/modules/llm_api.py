@@ -10,6 +10,7 @@ def process_query(query):
     completion = client.chat.completions.create(
         model="QuantFactory/Meta-Llama-3-8B-Instruct-GGUF",
         messages=[
+            {"role": "system", "content": "You are a helpful assistant named Billy Bob."},
             {"role": "user", "content": query}
         ],
         temperature=0.7,

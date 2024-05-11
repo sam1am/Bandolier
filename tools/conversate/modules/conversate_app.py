@@ -28,7 +28,7 @@ class ConversateApp:
         self.channels = 1
         self.duration = 5  # Recording duration in seconds
 
-        self.input_device = int(os.getenv("SOUND_DEVICE", 22))
+        self.input_device = int(os.getenv("SOUND_INPUT_DEVICE", 22))
         # set to default device
         
     def run(self):
