@@ -9,6 +9,7 @@ from .database import log_interaction
 import os
 from dotenv import load_dotenv
 import soundfile as sf
+import time
 
 load_dotenv()
 
@@ -33,7 +34,6 @@ class ConversateApp:
     def run(self):
         running = True
         while running:
-
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -51,38 +51,46 @@ class ConversateApp:
                         wavfile.write(audio_file, self.sample_rate, recording)
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_SPACE:
+                        start_time = time.time()
 
                         # Convert audio to text using stt_api
                         pygame.draw.circle(self.screen, self.thinking_color, (self.screen_width // 2, self.screen_height // 2), 100)
                         pygame.display.flip()
+                        stt_start_time = time.time()
                         query = convert_audio_to_text(audio_file)
+                        stt_time = time.time() - stt_start_time
+                        print(f"STT ... {stt_time} seconds")
                         if query == "":
                             query = "Howdy"
                         
                         print(f"Query: {query}")
 
                         # Process the query using llm_api
+                        inference_start_time = time.time()
                         response_text = process_query(query)
+                        inference_time = time.time() - inference_start_time
+                        print(f"Inference ... {inference_time} seconds")
                         
-
-                        # Extract the text content from the response
-                        if isinstance(response_text, dict) and "content" in response_text:
-                            response_content = response_text["content"]
-                        else:
-                            response_content = str(response_text)
-
                         # Convert the response to speech using tts_api
                         pygame.draw.circle(self.screen, self.speaking_color, (self.screen_width // 2, self.screen_height // 2), 100)
                         pygame.display.flip()
-                        audio_file = convert_to_speech(response_content)
+                        tts_start_time = time.time()
+                        audio_file = convert_to_speech(response_text)
+                        tts_time = time.time() - tts_start_time
+                        print(f"TTS ... {tts_time} seconds")
+
+                        total_time = time.time() - start_time
+                        print(f"Turn completed in {total_time} seconds")
 
                         # Play the audio file using sounddevice
                         data, sample_rate = sf.read(audio_file)
                         sd.play(data, sample_rate, device=self.input_device)
                         sd.wait()
 
+                        
+
                         # Log the interaction to the database
-                        log_interaction(query, response_content)
+                        log_interaction(query, response_text)
             
             # Draw the idle circle
             self.screen.fill(self.background_color)
