@@ -5,7 +5,7 @@ import scipy.io.wavfile as wavfile
 from .llm_api import process_query
 from .tts_api import convert_to_speech
 from .stt_api import convert_audio_to_text
-from .database import log_interaction
+from .database import log_interaction, get_last_messages
 import os
 from dotenv import load_dotenv
 import soundfile as sf
@@ -67,9 +67,13 @@ class ConversateApp:
                         
                         print(f"Query: {query_text}")
 
-                        # Process the query using llm_api
+                        # Retrieve the last X messages from the log
+                        num_messages = int(os.getenv("MESSAGE_HISTORY", 5))
+                        message_history = get_last_messages(num_messages)
+                        
+                        # Process the query using llm_api with message history
                         inference_start_time = time.time()
-                        response_text = process_query(query_text)
+                        response_text = process_query(query_text, message_history)
                         inference_time = time.time() - inference_start_time
                         print(f"Inference ... {inference_time} seconds")
                         

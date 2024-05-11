@@ -6,13 +6,20 @@ load_dotenv()
 
 client = OpenAI(base_url=os.getenv("LLM_API_URL"), api_key=os.getenv("LLM_API_KEY"))
 
-def process_query(query):
+def process_query(query, message_history):
+    messages = [
+        {"role": "system", "content": "You are a helpful assistant named Billy Bob."}
+    ]
+    
+    for query_text, response_text in message_history:
+        messages.append({"role": "user", "content": query_text})
+        messages.append({"role": "assistant", "content": response_text})
+    
+    messages.append({"role": "user", "content": query})
+    
     completion = client.chat.completions.create(
         model="QuantFactory/Meta-Llama-3-8B-Instruct-GGUF",
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant named Billy Bob."},
-            {"role": "user", "content": query}
-        ],
+        messages=messages,
         temperature=0.7,
     )
     response_text = completion.choices[0].message
