@@ -85,7 +85,7 @@ def get_messages_by_date(date):
 
 def check_missing_journal_entries():
     
-    journal_folder = "./journal"
+    journal_folder = "./workspace/journal"
     os.makedirs(journal_folder, exist_ok=True)
 
     distinct_dates = get_distinct_dates()
