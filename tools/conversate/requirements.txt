@@ -9,3 +9,4 @@ soundfile
 # groq
 # anthropic
 librosa
+flask
