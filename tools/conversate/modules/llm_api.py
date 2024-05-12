@@ -58,7 +58,7 @@ def process_query(query, message_history, is_journal_update=False):
         system=system_prompt,        
         messages=messages,
         temperature=float(os.getenv("LLM_TEMP")),
-        max_tokens=1000,
+        max_tokens=4096,
         # response_format={"type": "json_object"}, #experimental
     )
     # response_text = completion.choices[0].message
