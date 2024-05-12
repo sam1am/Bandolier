@@ -1,7 +1,9 @@
 import pygame
 from modules.conversate_app import ConversateApp
+from modules.database import create_interactions_table
 
 def main():
+    create_interactions_table()
     # Initialize Pygame
     pygame.init()
 

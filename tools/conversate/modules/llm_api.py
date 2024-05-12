@@ -33,20 +33,16 @@ def process_query(query, message_history):
         response_json=response_json
     )
 
-    # messages = [
-    #     {"role": "system", "content": system_prompt}
-    # ]
-    
     messages = []
 
+    # Add historical messages to the beginning of the messages list
     for query_text, response_text in message_history:
         if query_text.strip():
-            messages.append({"role": "user", "content": query_text})
-            print(f"Query: {query_text}")
+            messages.append({"role": "user", "content": query_text})            
         if response_text.strip():
             messages.append({"role": "assistant", "content": response_text})
-            print(f"Response: {response_text}")
-    
+            
+    # Append the current query to the messages list
     if query.strip():
         messages.append({"role": "user", "content": query})
         # print(f"\n\nQuery:\n\n{query}\n\n")
@@ -65,11 +61,11 @@ def process_query(query, message_history):
     )
     # response_text = completion.choices[0].message
     # print(completion.content)
-    response_content = completion.content
+    response_text = completion.content
 
     # Extract the text content from the response
-    if hasattr(response_text, "text"):
-        response_content = response_text.content
+    if isinstance(response_text, list) and len(response_text) > 0 and hasattr(response_text[0], "text"):
+        response_content = response_text[0].text
     else:
         response_content = str(response_text)
 

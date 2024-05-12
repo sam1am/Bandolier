@@ -87,7 +87,7 @@ class ConversateApp:
                         if query_text == "":
                             # query_text = "Howdy"
                             print("I didn't hear you.")
-                            pass
+                            continue
                         self.process_query(query_text, query_audio_file, query_uuid)
                             
             # Draw the idle circle and text input box
@@ -116,7 +116,7 @@ class ConversateApp:
         if not query_uuid:
             query_uuid = str(uuid.uuid4())
         
-        print(f"Query: {query_text}")
+        # print(f"Query: {query_text}")
 
         # Retrieve the last X messages from the log
         num_messages = int(os.getenv("MESSAGE_HISTORY", 10))
