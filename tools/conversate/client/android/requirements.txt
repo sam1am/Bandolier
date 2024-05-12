@@ -1,0 +1,5 @@
+kivy
+python_dotenv
+Cython==0.29.33
+virtualenv
+pyjnius

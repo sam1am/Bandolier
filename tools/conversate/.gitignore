@@ -2,6 +2,7 @@
 workspace/*
 .summary_files/*
 *.db
+.buildozer/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
