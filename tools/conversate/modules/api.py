@@ -1,5 +1,6 @@
 
 from flask import Flask, request, jsonify
+from flask_httpauth import HTTPBasicAuth
 from .llm_api import process_query
 from .database import log_interaction, get_last_messages
 import os
@@ -10,8 +11,16 @@ from datetime import datetime
 
 
 app = Flask(__name__)
+auth = HTTPBasicAuth()
+
+API_PASSWORD = 'lookatmeimanapikey'
+
+@auth.verify_password
+def verify_password(username, password):
+    return password == API_PASSWORD
 
 @app.route('/api/query', methods=['POST'])
+@auth.login_required
 def query_api():
     data = request.get_json()
     query_text = data.get('query', '')

@@ -10,3 +10,4 @@ soundfile
 # anthropic
 librosa
 flask
+flask_httpauth
