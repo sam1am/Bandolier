@@ -41,12 +41,14 @@ def get_last_messages(num_messages):
     db_connection = get_db_connection()
     db_cursor = db_connection.cursor()
     try:
+        today = datetime.now().date()
         db_cursor.execute("""
             SELECT query_text, response_text
             FROM interactions
+            WHERE DATE(timestamp) = ?
             ORDER BY rowid ASC
             LIMIT ?
-        """, (num_messages,))
+        """, (today, num_messages))
     except sqlite3.OperationalError:
         print("Could not fetch messages from database.")
         return []
