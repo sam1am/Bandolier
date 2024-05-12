@@ -85,6 +85,8 @@ class ConversateApp:
                         if query_text == "":
                             print("I didn't hear you.")
                             continue
+                        else:
+                            print(f"You said: {query_text}")
                         self.process_query(query_text, query_audio_file, query_uuid)
                             
             # Draw the idle circle and text input box

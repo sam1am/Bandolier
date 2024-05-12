@@ -1,0 +1,35 @@
+# The subconcious model runs many conrurrent queries in parallel very quickly from many angles. Optimize for: speed, creativity.
+subconcious:
+  provider: openai
+  model: TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF
+  temperature: 2
+  max_tokens: 300
+
+# conversational model talks to the user. Optimize for: speed, conversation quality, json output.
+conversational:
+  provider: anthropic
+  model: claude-3-sonnet-20240229
+  temperature: 0.95
+  max_tokens: 500
+
+conversational_alt:
+  provider: groq
+  model: mixtral-8x7b-32768 #llama3-70b-8192
+  temperature: 1.0
+  max_tokens: 500
+
+# The internal model is used to generate internal monologue, speaking with agents, memory recall, dreaming, etc. Optimize for: low cost, instruction following. 
+internal:
+  provider: openai
+  model: lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF
+  temperature: 1.1
+  max_tokens: 1200
+
+# Deep reasoning model is used to solve complex problems that require a lot of attention like programming. Optimize for: reasoning, quality. The smartest model.
+deep_reasoning:
+  provider: anthropic
+  model: claude-3-opus-20240229
+  temperature: 0.9
+  max_tokens: 4000
+
+
