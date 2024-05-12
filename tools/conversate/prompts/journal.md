@@ -1,0 +1,1 @@
+Write a detailed journal entry for yourself based on the conversations you had today. Your response will be saved to your personal journal for later reference. 

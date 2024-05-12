@@ -1,5 +1,10 @@
 import sqlite3
-import time
+from datetime import datetime
+from .llm_api import process_query
+import os
+import json
+
+os.environ['TZ'] = 'MST'
 
 def get_db_connection():
     return sqlite3.connect("./workspace/history.db")
@@ -10,7 +15,7 @@ def create_interactions_table():
     db_cursor.execute("""
         CREATE TABLE IF NOT EXISTS interactions (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+            timestamp DATETIME DEFAULT (datetime('now', 'localtime')),
             query_uuid TEXT,
             query_audio_file TEXT,
             query_text TEXT,
@@ -52,3 +57,65 @@ def get_last_messages(num_messages):
         return []
     
     return messages
+
+def get_distinct_dates():
+    db_connection = get_db_connection()
+    db_cursor = db_connection.cursor()
+    db_cursor.execute("""
+        SELECT DISTINCT DATE(timestamp) AS date
+        FROM interactions
+        ORDER BY date
+    """)
+    dates = db_cursor.fetchall()
+    db_connection.close()
+    return [date[0] for date in dates]
+
+def get_messages_by_date(date):
+    db_connection = get_db_connection()
+    db_cursor = db_connection.cursor()
+    db_cursor.execute("""
+        SELECT query_text, response_text
+        FROM interactions
+        WHERE DATE(timestamp) = ?
+        ORDER BY rowid ASC
+    """, (date,))
+    messages = db_cursor.fetchall()
+    db_connection.close()
+    return messages
+
+def check_missing_journal_entries():
+    
+    journal_folder = "./journal"
+    os.makedirs(journal_folder, exist_ok=True)
+
+    distinct_dates = get_distinct_dates()
+    today = datetime.now().date()
+
+    for date in distinct_dates:
+        if date == today:
+            continue
+
+        journal_file = os.path.join(journal_folder, f"{date}.md")
+        if not os.path.exists(journal_file):
+            print(f"Journaling for {date}...")
+            messages = get_messages_by_date(date)
+            journal_prompt = load_file_contents("./prompts/journal.md")
+            journal_entry = process_query(journal_prompt, messages)
+
+            # if journal_entry can be loaded as a json object, get short_answer
+            try:
+                journal_entry = json.loads(journal_entry)
+                if "short_answer" in journal_entry:
+                    journal_entry = journal_entry["short_answer"]
+            except json.JSONDecodeError:
+                journal_entry = journal_entry
+
+            with open(journal_file, "w") as file:
+                file.write(journal_entry)
+
+            print("Done!")
+
+def load_file_contents(filename):
+    with open(filename, "r") as file:
+        return file.read()
+    

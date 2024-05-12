@@ -1,9 +1,10 @@
 import pygame
 from modules.conversate_app import ConversateApp
-from modules.database import create_interactions_table
+from modules.database import create_interactions_table, check_missing_journal_entries
 
 def main():
     create_interactions_table()
+    check_missing_journal_entries()
     # Initialize Pygame
     pygame.init()
 
@@ -15,6 +16,7 @@ def main():
     # Create an instance of ConversateApp
     app = ConversateApp(screen)
 
+    print("Ready.")
     # Run the application
     app.run()
 

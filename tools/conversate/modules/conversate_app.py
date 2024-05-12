@@ -33,11 +33,9 @@ class ConversateApp:
         self.thinking_color = (128, 0, 128)
         self.speaking_color = (0, 255, 0)
 
-        # Set up the audio recording parameters
         self.sample_rate = 48000
         self.channels = 1
 
-        # self.input_device = int(os.getenv("SOUND_INPUT_DEVICE", 22))
         self.input_device = None
         self.output_device = None
         
@@ -85,7 +83,6 @@ class ConversateApp:
                         wavfile.write(query_audio_file, self.sample_rate, recording)
                         query_text = convert_audio_to_text(query_audio_file)
                         if query_text == "":
-                            # query_text = "Howdy"
                             print("I didn't hear you.")
                             continue
                         self.process_query(query_text, query_audio_file, query_uuid)
@@ -167,22 +164,15 @@ class ConversateApp:
         total_time = time.time() - start_time
         print(f"Turn completed in {total_time} seconds")
 
-        # Log the interaction to the database
         log_interaction(query_uuid, query_audio_file, query_text, response_text, response_audio_file)
 
 
     def speak_audio(self, audio_data, sample_rate):
-        # Create a BytesIO object from the audio data
         audio_bytes = io.BytesIO()
         sf.write(audio_bytes, audio_data, sample_rate, format='wav')
         audio_bytes.seek(0)
-
-        # Load the audio data using Pygame mixer
         sound = mixer.Sound(audio_bytes)
-
-        # Play the audio
         channel = sound.play()
-
         # Wait for the playback to finish
         while mixer.get_busy():
             pygame.time.delay(100)

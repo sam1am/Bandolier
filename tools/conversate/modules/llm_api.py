@@ -21,7 +21,7 @@ def load_file_contents(file_path):
     with open(file_path, "r") as file:
         return file.read()
 
-def process_query(query, message_history):
+def process_query(query, message_history, is_journal_update=False):
     default_prompt = load_file_contents("./prompts/default.md")
     penny_yaml = load_file_contents("./prompts/penny.yaml")
     user_yaml = load_file_contents("./prompts/user.yaml")
@@ -35,18 +35,20 @@ def process_query(query, message_history):
 
     messages = []
 
-    # Add historical messages to the beginning of the messages list
-    for query_text, response_text in message_history:
-        if query_text.strip():
-            messages.append({"role": "user", "content": query_text})            
-        if response_text.strip():
-            messages.append({"role": "assistant", "content": response_text})
-            
-    # Append the current query to the messages list
-    if query.strip():
+    if is_journal_update:
+        messages = [{"role": "user", "content": message[0] + "\n" + message[1]} for message in message_history]
         messages.append({"role": "user", "content": query})
-        # print(f"\n\nQuery:\n\n{query}\n\n")
-    # messages.append({"role": "user", "content": query})
+    else:
+        # Add historical messages to the beginning of the messages list
+        for query_text, response_text in message_history:
+            if query_text.strip():
+                messages.append({"role": "user", "content": query_text})            
+            if response_text.strip():
+                messages.append({"role": "assistant", "content": response_text})
+                
+        # Append the current query to the messages list
+        if query.strip():
+            messages.append({"role": "user", "content": query})
     
     # completion = client.chat.completions.create( # groq/openai
     completion = client.messages.create(
@@ -55,7 +57,7 @@ def process_query(query, message_history):
         model=os.getenv("ANTHROPIC_MODEL"),
         system=system_prompt,        
         messages=messages,
-        # temperature=float(os.getenv("LLM_TEMP")),
+        temperature=float(os.getenv("LLM_TEMP")),
         max_tokens=1000,
         # response_format={"type": "json_object"}, #experimental
     )
