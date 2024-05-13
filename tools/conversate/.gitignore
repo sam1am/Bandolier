@@ -1,8 +1,11 @@
 # conversate 
 workspace/*
-.summary_files/*
+.summary_files/
 *.db
 .buildozer/
+nohup.out
+*debug.apk
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
