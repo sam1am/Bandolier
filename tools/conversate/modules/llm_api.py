@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 import json
 import yaml
+import tiktoken
 
 load_dotenv()
 
@@ -9,7 +10,7 @@ def load_file_contents(file_path):
     with open(file_path, "r") as file:
         return file.read()
 
-def process_query(query, message_history, is_journal_update=False, config_name="conversational"):
+def process_query(query, message_history, is_journal_update=False, config_name="deep_reason"):
     # Load the configuration file
     with open("./mind_models.yaml", "r") as config_file:
         config = yaml.safe_load(config_file)
@@ -58,6 +59,10 @@ def process_query(query, message_history, is_journal_update=False, config_name="
         if query.strip():
             messages.append({"role": "user", "content": query})
 
+    # get the token count of our system prompt
+    print(f"System prompt tokens: {num_tokens_from_string(system_prompt)}")
+    
+
     if client_config["provider"] == "anthropic":
         completion = client.messages.create(
             model=client_config["model"],
@@ -78,7 +83,8 @@ def process_query(query, message_history, is_journal_update=False, config_name="
             messages=messages,
             temperature=client_config["temperature"],
             max_tokens=client_config["max_tokens"],
-            # response_format={"type": "json_object"}, #experimental
+            # response_format={"type": "json_object"}, #experimental for groq
+            # structured={ type: "json" }, #lm-studio convention
         )
         response_text = completion.choices[0].message
         if isinstance(response_text, dict) and "content" in response_text:
@@ -95,3 +101,9 @@ def process_query(query, message_history, is_journal_update=False, config_name="
     print(f"\n\nResponse:\n\n{response_content}\n\n")
 
     return response_content
+
+def num_tokens_from_string(string: str) -> int:
+    """Returns the number of tokens in a text string."""
+    encoding = tiktoken.get_encoding("cl100k_base")
+    num_tokens = len(encoding.encode(string))
+    return num_tokens

@@ -21,12 +21,12 @@ conversational_alt:
 # The internal model is used to generate internal monologue, speaking with agents, memory recall, dreaming, etc. Optimize for: low cost, instruction following. 
 internal:
   provider: openai
-  model: lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF
+  model: NousResearch/Hermes-2-Pro-Mistral-7B-GGUF #lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF
   temperature: 1.1
   max_tokens: 1200
 
 # Deep reasoning model is used to solve complex problems that require a lot of attention like programming. Optimize for: reasoning, quality. The smartest model.
-deep_reasoning:
+deep_reason:
   provider: anthropic
   model: claude-3-opus-20240229
   temperature: 0.9

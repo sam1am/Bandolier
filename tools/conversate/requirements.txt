@@ -11,3 +11,4 @@ soundfile
 librosa
 flask
 flask_httpauth
+tiktoken
