@@ -12,7 +12,7 @@ def load_file_contents(file_path):
 
 def process_query(query, message_history, is_journal_update=False, config_name="deep_reason"):
     # Load the configuration file
-    with open("./mind_models.yaml", "r") as config_file:
+    with open("./entities/self/mind_models.yaml", "r") as config_file:
         config = yaml.safe_load(config_file)
 
     # Get the specified configuration
@@ -34,12 +34,10 @@ def process_query(query, message_history, is_journal_update=False, config_name="
     else:
         raise ValueError(f"Unsupported provider: {client_config['provider']}")
 
-    # default_prompt = load_file_contents("./prompts/default.md")
-
-    system_prompt = load_file_contents("./prompts/default.md").format(
-        penny_yaml=load_file_contents("./prompts/penny.yaml"),
-        user_yaml=load_file_contents("./prompts/user.yaml"),
-        response_json=load_file_contents("./prompts/response.json")
+    system_prompt = load_file_contents("./entities/self/prompts/default.md").format(
+        self_yaml=load_file_contents("./entities/self/self.yaml"),
+        user_yaml=load_file_contents("./entities/user/user.yaml"),
+        response_json=load_file_contents("./entities/self/prompts/response.json")
     )
 
     messages = []
