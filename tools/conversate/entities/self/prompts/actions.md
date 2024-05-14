@@ -1,4 +1,3 @@
-actions list:
+all available actions list:
 
-[[update_self(new_yaml)]] Replace the contents of penny.yaml
-[[update_user(new_yaml)]] Replace the contents of user.yaml
+[[side_conversation]] <prompt> Spawn a computer agent who can operate the user's computer and write, execute, and debug code.

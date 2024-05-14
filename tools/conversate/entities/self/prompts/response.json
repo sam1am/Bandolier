@@ -11,7 +11,7 @@
         },
         "action": {
             "type": "string",
-            "description": "If an action is called for, I will call for it to be executed. When the response is ready, I will receive an alert message and can follow-up with my partner."
+            "description": "If an action is called for, I will call for it to be executed here using the [[]] syntax. When the response is ready, I will receive an alert message and can follow-up with my user in a future response."
         }
     },
     "required": [

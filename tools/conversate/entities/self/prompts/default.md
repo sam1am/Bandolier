@@ -10,3 +10,7 @@ My response will strictly follow the form of a json object with the following sc
 ```response.json
 {response_json}
 ```
+Here is a comprehensive list of the actions I have available to me:
+```
+{actions_md}
+```
