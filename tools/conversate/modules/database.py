@@ -23,6 +23,15 @@ def create_interactions_table():
             response_audio_file TEXT
         )
     """)
+    db_cursor.execute("""
+        CREATE TABLE IF NOT EXISTS side_conversations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            uuid TEXT,
+            role TEXT,
+            content TEXT
+        )
+    """)
+
     db_connection.commit()
     db_connection.close()
 
@@ -101,7 +110,7 @@ def check_missing_journal_entries():
         if not os.path.exists(journal_file):
             print(f"Journaling for {date}...")
             messages = get_messages_by_date(date)
-            journal_prompt = load_file_contents("./prompts/journal.md")
+            journal_prompt = load_file_contents("./entities/self/prompts/journal.md")
             journal_entry = process_query(journal_prompt, messages)
 
             # if journal_entry can be loaded as a json object, get short_answer
@@ -120,4 +129,14 @@ def check_missing_journal_entries():
 def load_file_contents(filename):
     with open(filename, "r") as file:
         return file.read()
-    
+
+def log_side_conversation(side_conversation_uuid, side_conversation_messages):
+    db_connection = get_db_connection()
+    db_cursor = db_connection.cursor()
+    for message in side_conversation_messages:
+        db_cursor.execute("""
+            INSERT INTO side_conversations (uuid, role, content)
+            VALUES (?, ?, ?)
+        """, (side_conversation_uuid, message["role"], message["content"]))
+    db_connection.commit()
+    db_connection.close()

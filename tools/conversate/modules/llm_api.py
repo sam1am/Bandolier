@@ -4,6 +4,12 @@ import json
 import yaml
 import tiktoken
 
+# from .database import log_side_conversation
+
+import uuid
+from interpreter import OpenInterpreter
+import threading
+
 load_dotenv()
 
 def load_file_contents(file_path):
@@ -37,7 +43,8 @@ def process_query(query, message_history, is_journal_update=False, config_name="
     system_prompt = load_file_contents("./entities/self/prompts/default.md").format(
         self_yaml=load_file_contents("./entities/self/self.yaml"),
         user_yaml=load_file_contents("./entities/user/user.yaml"),
-        response_json=load_file_contents("./entities/self/prompts/response.json")
+        response_json=load_file_contents("./entities/self/prompts/response.json"),
+        actions_md=load_file_contents("./entities/self/prompts/actions.md"),
     )
 
     messages = []
@@ -81,8 +88,6 @@ def process_query(query, message_history, is_journal_update=False, config_name="
             messages=messages,
             temperature=client_config["temperature"],
             max_tokens=client_config["max_tokens"],
-            # response_format={"type": "json_object"}, #experimental for groq
-            # structured={ type: "json" }, #lm-studio convention
         )
         response_text = completion.choices[0].message
         if isinstance(response_text, dict) and "content" in response_text:
@@ -92,9 +97,17 @@ def process_query(query, message_history, is_journal_update=False, config_name="
         else:
             response_content = str(response_text)
 
+    # Check if the response contains a side conversation request
+    if "[[side_conversation]]" in response_content:
+        # Extract the side conversation prompt
+        side_conversation_prompt = response_content.split("[[side_conversation]]")[1].strip()
 
-    # Extract the text content from the response
-    
+        # Create a new thread for the side conversation
+        side_conversation_thread = threading.Thread(target=conduct_side_conversation, args=(side_conversation_prompt,))
+        side_conversation_thread.start()
+
+        # Remove the side conversation request from the response
+        response_content = response_content.split("[[side_conversation]]")[0].strip()
 
     print(f"\n\nResponse:\n\n{response_content}\n\n")
 
@@ -105,3 +118,41 @@ def num_tokens_from_string(string: str) -> int:
     encoding = tiktoken.get_encoding("cl100k_base")
     num_tokens = len(encoding.encode(string))
     return num_tokens
+
+def conduct_side_conversation(side_conversation_prompt):
+    # Create two OpenInterpreter instances for the side conversation
+    agent_1 = OpenInterpreter()
+    agent_1.system_message = "You are Agent 1 in the side conversation."
+
+    agent_2 = OpenInterpreter()
+    agent_2.system_message = "You are Agent 2 in the side conversation."
+
+    def swap_roles(messages):
+        for message in messages:
+            if message['role'] == 'user':
+                message['role'] = 'assistant'
+            elif message['role'] == 'assistant':
+                message['role'] = 'user'
+        return messages
+
+    agents = [agent_1, agent_2]
+
+    # Generate a unique UUID for the side conversation
+    side_conversation_uuid = str(uuid.uuid4())
+
+    # Kick off the side conversation
+    messages = [{"role": "user", "content": side_conversation_prompt}]
+
+    while True:
+        for agent in agents:
+            messages = agent.chat(messages)
+            messages = swap_roles(messages)
+
+            # Log each message in the side conversation
+            for message in messages:
+                # log_side_conversation(side_conversation_uuid, message["role"], message["content"])
+                print(message)
+
+            # Check if the side conversation has ended
+            if any("[[end_side_conversation]]" in message["content"] for message in messages):
+                return
