@@ -1,3 +1,1 @@
-all available actions list:
-
 [[side_conversation]] <prompt> Spawn a computer agent who can operate the user's computer and write, execute, and debug code.

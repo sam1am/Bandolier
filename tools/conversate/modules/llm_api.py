@@ -37,7 +37,8 @@ def process_query(query, message_history, is_journal_update=False, config_name="
     system_prompt = load_file_contents("./entities/self/prompts/default.md").format(
         self_yaml=load_file_contents("./entities/self/self.yaml"),
         user_yaml=load_file_contents("./entities/user/user.yaml"),
-        response_json=load_file_contents("./entities/self/prompts/response.json")
+        response_json=load_file_contents("./entities/self/prompts/response.json"),
+        actions_md=load_file_contents("./entities/self/prompts/actions.md"),
     )
 
     messages = []

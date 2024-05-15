@@ -12,3 +12,4 @@ librosa
 flask
 flask_httpauth
 tiktoken
+unstructured[all-docs] 
