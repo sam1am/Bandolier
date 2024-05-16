@@ -12,14 +12,21 @@ import nltk
 
 load_dotenv()
 
+nltk.download('punkt')
+
+# Global flag to indicate TTS availability
+tts_available = True
+
 try: 
     tts_client = gradio_client.Client(os.getenv("TTS_API_URL"))
 except Exception as e:
     print(f"Error connecting to TTS API. Make sure xtts2_ui is running: {e}")
-    exit()
-nltk.download('punkt')
+    tts_available = False
 
 def convert_to_speech(text, query_uuid, speak_callback):
+    if not tts_available:
+        print("TTS is unavailable. Skipping TTS conversion.")
+        return None, None
     sentences = nltk.sent_tokenize(text)
     audio_queue = Queue()
     concatenation_queue = Queue()

@@ -15,7 +15,7 @@ import scipy.io.wavfile as wavfile
 from threading import Thread
 
 from .llm_api import process_query
-from .tts_api import convert_to_speech
+from .tts_api import convert_to_speech, tts_available
 from .stt_api import convert_audio_to_text
 from .database import log_interaction, get_last_messages
 
@@ -110,25 +110,20 @@ class ConversateApp:
                 sd.wait()
                 self.recorded_frames.append(frame)
     
+    # Modify the process_query method
     def process_query(self, query_text, query_audio_file="", query_uuid=None):
         start_time = time.time()
         if not query_uuid:
             query_uuid = str(uuid.uuid4())
         
-        # print(f"Query: {query_text}")
-
-        # Retrieve the last X messages from the log
         num_messages = int(os.getenv("MESSAGE_HISTORY", 10))
         message_history = get_last_messages(num_messages)
         
-        # Process the query using llm_api with message history
         pygame.draw.circle(self.screen, self.thinking_color, (self.screen_width // 2, self.screen_height // 2), 100)
         pygame.display.flip()
         inference_start_time = time.time()
         response_text = process_query(query_text, message_history)
 
-
-        # Extract the JSON object from the response using regular expressions
         json_match = re.search(r"\{.*\}", response_text, re.DOTALL)
         response_json = None
         if json_match:
@@ -145,23 +140,22 @@ class ConversateApp:
         inference_time = time.time() - inference_start_time
         print(f"Inference ... {inference_time} seconds")
         
-        # Convert the response to speech using tts_api
-        pygame.draw.circle(self.screen, self.speaking_color, (self.screen_width // 2, self.screen_height // 2), 100)
-        pygame.display.flip()
-        tts_start_time = time.time()
-        response_audio_file = f"./workspace/responses/{query_uuid}.wav"
-        # concatenated_audio, sample_rate = convert_to_speech(response_text, query_uuid, self.speak_audio)
-        # ifresponse_json exist and there is a short answer, use it, if not, use the fuill response text
-        if response_json:
-            # if short_answer key exists:
-            if "short_answer" in response_json:
+        # Check if TTS is available before processing TTS
+        if tts_available:
+            pygame.draw.circle(self.screen, self.speaking_color, (self.screen_width // 2, self.screen_height // 2), 100)
+            pygame.display.flip()
+            tts_start_time = time.time()
+            response_audio_file = f"./workspace/responses/{query_uuid}.wav"
+            
+            if response_json and "short_answer" in response_json:
                 concatenated_audio, sample_rate = convert_to_speech(response_json["short_answer"], query_uuid, self.speak_audio)
-        else:
-            concatenated_audio, sample_rate = convert_to_speech(response_text, query_uuid, self.speak_audio)
-        sf.write(response_audio_file, concatenated_audio, sample_rate)
-        tts_time = time.time() - tts_start_time
-        print(f"TTS ... {tts_time} seconds")
+            else:
+                concatenated_audio, sample_rate = convert_to_speech(response_text, query_uuid, self.speak_audio)
 
+            if concatenated_audio != None and sample_rate != None:
+                sf.write(response_audio_file, concatenated_audio, sample_rate)
+            tts_time = time.time() - tts_start_time
+            print(f"TTS ... {tts_time} seconds")
 
         total_time = time.time() - start_time
         print(f"Turn completed in {total_time} seconds")
