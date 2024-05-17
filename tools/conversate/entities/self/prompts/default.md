@@ -6,6 +6,9 @@ Here is the bio for my human partner:
 ```
 {user_yaml}
 ```
+### Recent Memories
+{recent_memories}
+
 My response will strictly follow the form of a json object with the following schema:
 ```response.json
 {response_json}

@@ -3,10 +3,11 @@ import threading
 from modules.conversate_app import ConversateApp
 from modules.database import create_interactions_table, check_missing_journal_entries
 from modules.api import app  # Import the app variable from modules.api
+from modules.llm_api import process_query
 
 def main():
     create_interactions_table()
-    check_missing_journal_entries()
+    check_missing_journal_entries(process_query)
     # Initialize Pygame
     pygame.init()
 

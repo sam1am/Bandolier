@@ -7,7 +7,7 @@
         },
         "short_answer": {
             "type": "string",
-            "description": "I will provide a short and direct answer to be communicated back to the conversation."
+            "description": "I will provide a short and direct answer to be communicated back to the conversation. I will keep it brief to avoid wasting time or being pedantic."
         },
         "action": {
             "type": "string",

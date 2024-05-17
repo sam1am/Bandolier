@@ -1,0 +1,1 @@
+Please provide a brief summary of today's interactions including key points and important information. Your response will be saved for future reference.

@@ -32,4 +32,10 @@ deep_reason:
   temperature: 0.9
   max_tokens: 4000
 
+vllm:
+  provider: openai
+  model: casperhansen/llama-3-8b-instruct-awq
+  temperature: 1.0
+  max_tokens: 800
+
 
