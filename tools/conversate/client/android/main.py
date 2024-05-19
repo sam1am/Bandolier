@@ -86,6 +86,17 @@ class QueryApp(App):
         else:
             self.response_label.text = "Please enter a query."
 
+    def on_new_intent(self, intent):
+        action = intent.getAction()
+        if action == 'android.intent.PTT.up':
+            message = 'PTT button released'
+        elif action == 'android.intent.PTT.down':
+            message = 'PTT button pressed'
+        else:
+            message = 'Unknown PTT action'
+        
+    Toast.makeText(PythonActivity.mActivity, message, Toast.LENGTH_SHORT).show()
+
 class PTTReceiver(PythonActivity):
     __javaclass__ = 'org.kivy.android.PTTReceiver'
 

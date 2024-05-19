@@ -8,6 +8,11 @@ public class PTTReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // Pass the received intent to the Python layer
-        org.kivy.android.PythonActivity.mActivity.onReceive(context, intent);
+        PythonActivity.mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                org.kivy.android.PythonActivity.mActivity.onNewIntent(intent);
+            }
+        });
     }
 }
