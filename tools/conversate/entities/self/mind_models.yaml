@@ -28,7 +28,7 @@ internal:
 # Deep reasoning model is used to solve complex problems that require a lot of attention like programming. Optimize for: reasoning, quality. The smartest model.
 deep_reason:
   provider: anthropic
-  model: claude-3-opus-20240229
+  model: claude-3-opus-20240229 # claude-3-sonnet-20240229 # claude-3-opus-20240229
   temperature: 0.9
   max_tokens: 4000
 
