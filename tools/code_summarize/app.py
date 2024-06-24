@@ -256,13 +256,19 @@ def main():
     filtered_files = [file for file in files if not file.startswith('./.')]
     previous_selection = read_previous_selection()
     selected_files = select_files(filtered_files, previous_selection)
+    
+    # Save the selected files regardless of the --infer flag
+    write_previous_selection(selected_files)
+    
+    # Create the local code summary regardless of the --infer flag
+    create_code_summary(selected_files)
+    print("\nLocal code summary successfully created in '.summary_files/code_summary.md'.")
+
     # Use the flag to determine if OpenAI calls should be made
     if args.infer:
-        write_previous_selection(selected_files)
-        create_code_summary(selected_files)
         create_compressed_summary(selected_files)
-        print("\nCode summary successfully created in '.summary_files/code_summary.md'.")
         print("\nCompressed code summary successfully created in '.summary_files/compressed_code_summary.md'.")
+        
         # Load compressed code summary
         summary_directory = Path(".summary_files")
         compressed_summary_file = summary_directory / "compressed_code_summary.md"
@@ -278,10 +284,6 @@ def main():
             f.write(readme_content)
 
         print("\nUpdated README.md file successfully generated in 'README.md'.")
-    else:
-        # If the flag is not set, skip the OpenAI calls and only create the local summary file
-        create_code_summary(selected_files)
-        print("\nLocal code summary successfully created in '.summary_files/code_summary.md'.")
 
 if __name__ == "__main__":
     main()
