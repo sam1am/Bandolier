@@ -1,4 +1,5 @@
 import os
+import curses
 import json
 import hashlib
 from pathlib import Path
@@ -6,6 +7,8 @@ from ItsPrompt.prompt import Prompt
 from openai import OpenAI
 from dotenv import load_dotenv
 import argparse
+import keyboard
+import time
 
 load_dotenv()
 
@@ -23,6 +26,34 @@ IGNORE_LIST = [".git", "venv", ".summary_files"]
 # 1. Run the script
 # 2. Use arrow keys to select/deselect files, press ENTER to continue.
 # 3. The code summary will be saved in the current directory as code_summary.md
+
+def build_tree(directory, gitignore_specs, ignore_list):
+    tree = {}
+    for root, dirs, files in os.walk(directory):
+        # Skip ignored directories
+        dirs[:] = [d for d in dirs if d not in ignore_list and (gitignore_specs is None or not gitignore_specs.match_file(d))]
+        
+        current = tree
+        path = root.split(os.sep)[1:]  # Skip the '.' at the beginning
+        for part in path:
+            current = current.setdefault(part, {})
+        
+        for file in files:
+            if gitignore_specs is None or not gitignore_specs.match_file(os.path.join(root, file)):
+                current[file] = os.path.join(root, file)
+    
+    return tree
+
+def flatten_tree(tree, prefix=''):
+    items = []
+    for key, value in sorted(tree.items()):
+        if isinstance(value, dict):
+            items.append((f"{prefix}{key}/", None))
+            items.extend(flatten_tree(value, prefix=f"{prefix}{key}/"))
+        else:
+            items.append((f"{prefix}{key}", value))
+    return items
+
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Generate code summaries and README.")
@@ -200,19 +231,82 @@ def display_files():
 
 
 
-def select_files(files, previous_selection):
-    gitignore_specs = parse_gitignore()
-    filtered_files = [file for file in files if gitignore_specs is None or not gitignore_specs.match_file(file)]
+def select_files(directory, previous_selection, gitignore_specs, ignore_list):
+    tree = build_tree(directory, gitignore_specs, ignore_list)
+    flattened_tree = flatten_tree(tree)
+    
+    options = []
+    file_paths = {}
+    for item, path in flattened_tree:
+        if path:
+            options.append((item, item))
+            file_paths[item] = path
+        else:
+            options.append((f"[{item}]", item))
 
-    print("\nUse arrow keys and spacebar to select/deselect files, press ENTER to continue.")
-    selected_files = Prompt.checkbox(
-        question="Select files",
-        options=[(file, file) for file in filtered_files],
-        pointer_at=0,
-        default_checked=[file for file in previous_selection if file in filtered_files],
-        min_selections=0,
-    )
-    return selected_files
+    def draw_menu(stdscr, current_page, current_pos):
+        stdscr.clear()
+        h, w = stdscr.getmaxyx()
+        
+        page_size = h - 4  # Leave room for instructions and status line
+        start_idx = current_page * page_size
+        end_idx = min(start_idx + page_size, len(options))
+        current_options = options[start_idx:end_idx]
+
+        stdscr.addstr(0, 0, "Use UP/DOWN arrows to navigate, SPACE to select/deselect, ENTER to confirm.")
+        stdscr.addstr(1, 0, "Use LEFT/RIGHT arrows to change pages.")
+        
+        for idx, (item, _) in enumerate(current_options):
+            if idx == current_pos:
+                attr = curses.A_REVERSE  # Highlight the current position
+            else:
+                attr = curses.A_NORMAL
+            
+            if item in selected:
+                stdscr.addstr(idx + 2, 0, f"[X] {item}", attr)
+            else:
+                stdscr.addstr(idx + 2, 0, f"[ ] {item}", attr)
+        
+        total_pages = (len(options) + page_size - 1) // page_size
+        status = f"Page {current_page + 1}/{total_pages} | Items {start_idx + 1}-{end_idx} of {len(options)}"
+        stdscr.addstr(h-1, 0, status)
+        
+        stdscr.refresh()
+
+    def curses_main(stdscr):
+        nonlocal selected
+        curses.curs_set(0)  # Hide the cursor
+        current_page = 0
+        current_pos = 0
+        page_size = curses.LINES - 4  # Leave room for instructions and status line
+
+        while True:
+            draw_menu(stdscr, current_page, current_pos)
+            key = stdscr.getch()
+
+            if key == ord(' '):  # Spacebar
+                item = options[current_page * page_size + current_pos][0]
+                if item in selected:
+                    selected.remove(item)
+                else:
+                    selected.add(item)
+            elif key == curses.KEY_UP and current_pos > 0:
+                current_pos -= 1
+            elif key == curses.KEY_DOWN and current_pos < min(page_size - 1, len(options) - current_page * page_size - 1):
+                current_pos += 1
+            elif key == curses.KEY_LEFT and current_page > 0:
+                current_page -= 1
+                current_pos = 0
+            elif key == curses.KEY_RIGHT and (current_page + 1) * page_size < len(options):
+                current_page += 1
+                current_pos = 0
+            elif key == 10:  # Enter key
+                return
+
+    selected = set(item for item, _ in options if file_paths.get(item) in previous_selection)
+    curses.wrapper(curses_main)
+
+    return [file_paths[item] for item in selected if item in file_paths]
 
 
 def create_code_summary(selected_files):
@@ -250,21 +344,22 @@ def write_previous_selection(selected_files):
         json.dump(selected_files, f)
 
 def main():
-    args = parse_arguments()  # Parse command-line arguments
+    args = parse_arguments()
     create_hidden_directory()
-    files = display_files()
-    filtered_files = [file for file in files if not file.startswith('./.')]
-    previous_selection = read_previous_selection()
-    selected_files = select_files(filtered_files, previous_selection)
     
-    # Save the selected files regardless of the --infer flag
+    gitignore_specs = parse_gitignore()
+    ignore_list = IGNORE_LIST
+    
+    previous_selection = read_previous_selection()
+    selected_files = select_files(".", previous_selection, gitignore_specs, ignore_list)
+    
+    # Save the selected files
     write_previous_selection(selected_files)
     
-    # Create the local code summary regardless of the --infer flag
+    # Create the local code summary
     create_code_summary(selected_files)
     print("\nLocal code summary successfully created in '.summary_files/code_summary.md'.")
 
-    # Use the flag to determine if OpenAI calls should be made
     if args.infer:
         create_compressed_summary(selected_files)
         print("\nCompressed code summary successfully created in '.summary_files/compressed_code_summary.md'.")
@@ -287,4 +382,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
 
