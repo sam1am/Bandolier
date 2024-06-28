@@ -152,7 +152,7 @@ class ConversateApp:
             else:
                 concatenated_audio, sample_rate = convert_to_speech(response_text, query_uuid, self.speak_audio)
 
-            if concatenated_audio != None and sample_rate != None:
+            if concatenated_audio is not None and sample_rate is not None:
                 sf.write(response_audio_file, concatenated_audio, sample_rate)
             tts_time = time.time() - tts_start_time
             print(f"TTS ... {tts_time} seconds")
